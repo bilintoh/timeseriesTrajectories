@@ -1,4 +1,4 @@
-#' Creates a map and pie chart of the trajectories of the category of interest.
+#' Creates a map of the number of presence and change for the variable of interest.
 #' @param input is the results from running the "presenceData" function.
 #' @param pltunit is the unit in which the current map is plotted in, one of cm, m, km, in, ft, mi. or lat or lon.
 #' @param dataEpsg is the projection of the current map. If extents are valid lat and lons,

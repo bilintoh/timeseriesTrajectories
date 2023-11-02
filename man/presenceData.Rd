@@ -2,7 +2,7 @@
 % Please edit documentation in R/presenceData.R
 \name{presenceData}
 \alias{presenceData}
-\title{Create data for number of presence and change.}
+\title{Create data for the number of presence and change.}
 \usage{
 presenceData(x, nodata = -999)
 }
@@ -15,5 +15,5 @@ presenceData(x, nodata = -999)
 The output from \code{\link{presenceData}}
 }
 \description{
-Create data for number of presence and change.
+Create data for the number of presence and change.
 }

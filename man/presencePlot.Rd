@@ -2,7 +2,7 @@
 % Please edit documentation in R/presencePlot.R
 \name{presencePlot}
 \alias{presencePlot}
-\title{Creates a map and pie chart of the trajectories of the category of interest.}
+\title{Creates a map of the number of presence and change for the variable of interest.}
 \usage{
 presencePlot(
   input,
@@ -49,5 +49,5 @@ the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator o
 The output from \code{\link{presencePlot}}
 }
 \description{
-Creates a map and pie chart of the trajectories of the category of interest.
+Creates a map of the number of presence and change for the variable of interest.
 }

@@ -1,14 +1,15 @@
 #' creates the data which serves as input for the "trajPlot" function.
 #' @param x is the raster stack.
-#' @param zeroabsence is a string of "yes" or "no" indicating if 0 means absence. The default is "yes".
-#' @param unified is a string of "yes" or "no" indicating if the nanalysis invloves the unified size. The default is "yes"
-#' @param user_spatial is an integer for the user-defined spatial extent. Defualt is 0.
+#' @param zeroabsence is a string of "yes" or "no" indicating if 0 means absence. # The unified size is the union of the locations where the category exists at any time point. The default is "yes".
+#' @param unified is a string of "yes" or "no" indicating if the analysis involves the unified size. The default is "yes"
+#' @param user_spatial is an integer for the user-defined spatial extent. Default is 0.
 #' @import dplyr
 #' @import terra
 #' @import progress
 #' @import sf
 #' @importFrom stats var
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom data.table rbindlist
 #' @return The output from \code{\link{rastertrajData}}
 #' @export
 rastertrajData <- function(x,
@@ -374,6 +375,5 @@ rastertrajData <- function(x,
   return(list("Raster data for trajectory plot" = dfr,
               "Attribute data for trajectory plot" = df3,
               "Data for trajectory pie chart" = dfPie2,
-              "Number of time points" = ncl_noxy,
-              "Size of unified area" = unified_size2))
+              "Number of time points" = ncl_noxy))
 }

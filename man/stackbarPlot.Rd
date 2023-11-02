@@ -2,7 +2,7 @@
 % Please edit documentation in R/stackbarPlot.R
 \name{stackbarPlot}
 \alias{stackbarPlot}
-\title{Create stack bar plots showing trajectories sizes and the three change components.}
+\title{Create stack bar plots showing gross losses and gains of the trajectories and the three change components.}
 \usage{
 stackbarPlot(
   input,
@@ -51,5 +51,5 @@ If "no" the user need to mannual input values for "upperlym","lowerlym", "lymby"
 The output from \code{\link{stackbarPlot}}
 }
 \description{
-Create stack bar plots showing trajectories sizes and the three change components.
+Create stack bar plots showing gross losses and gains of the trajectories and the three change components.
 }

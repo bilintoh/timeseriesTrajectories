@@ -1,4 +1,4 @@
-#' Create stack bar plots showing trajectories sizes and the three change components.
+#' Create stack bar plots showing gross losses and gains of the trajectories and the three change components.
 #' @param input is the results from running the "dataStack" function.
 #' @param axisSize is a numerical value that control the size of the labels on tick marks of the horizontal
 #' and vertical tick marks.

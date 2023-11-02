@@ -1,0 +1,233 @@
+---
+title: "Trajectories of a varible"
+author: "Thomas Mumuni Bilintoh"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{timeseriesTrajectories}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup,include = FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width=8.5, 
+  fig.height=6,
+  comment = "#>"
+)
+# Make sure you load all the libraries below before you start using the package.
+library(timeseriesTrajectories)
+library(prettymapr)
+library(progress)
+library(RColorBrewer)
+library(classInt)
+library(ggnewscale)
+library(reshape2)
+library(terra)
+library(dplyr)
+library( data.table)
+```
+
+## Data
+The example data is a time series of five binary maps at five time points: 2000, 2001, 2002, 2003, and 2005.
+The tutorial analyzes the trajectory of variable 1, which in this instance indicates presence, whiles 0 represents absence.
+
+The time series maps are available in GeoTIFF formats and included in the package. 
+The first step is to load the raster files. 
+```{r, eval=TRUE, warning=FALSE}
+# Read the raster files from "externa"l folder as terra raster format.
+#NB: The package comes with "Example_Data_Y.tif" and "Continuous_Data.tif".
+#This tutorial shows results for only Example_Data_Y.tif.
+
+rasstackY <- terra::rast(system.file("external/binary_raster_stack.tif",package="timeseriesTrajectories"))
+rasstackY
+
+# Visualize the raster data
+plot(rasstackY)
+```
+
+## Calling the `dataClean` function
+Next, use the **dataClean** function to 
+reclassify your data if necessary. The functions build upon terra's **classify** function; thus, see terra's **classify** 
+function for more information about creating the reclassification range. I will reclassify the raster stack, so that all 0s become 1s and 1s become 2s. 
+to a binary raster stack to illustrate the functionality of the **dataClean** function.Type "?dataClean" in your R console to see the help file.
+
+```{r, eval=TRUE, warning=FALSE}
+# create a data frame for your range of values
+reclass_df <- cbind(from = c(1), 
+                    to = c(2), 
+                    becomes = c(2))
+
+#Use terra's **classify** function to reclassify the raster stacked based on your reclassification data frame.
+# Setting "include.lowest = TRUE" ensures that the lower limit of the range is included in the values to be reclassified.
+#  see terra's **classify** function for more information.
+rasstackY_v2 <- classify(rasstackY,reclass_df,include.lowest = TRUE)
+
+# Visualize the reclassified raster data
+plot(rasstackY_v2)
+```
+
+## Calling the `dataPreview` function
+The **dataPreview** function generates a time series graph for the variable where the vertical axis is the size of the variable, and the horizontal axis is time. 
+Type "?dataPreview" in your R console to see the help file.
+
+```{r, eval=TRUE, warning=FALSE}
+# Create a vector for the time points.
+tps = c(2000,2001,2002,2003,2005)
+
+# I know the units of my varibel is number of pixels, thus I will create a sting for the vertical units.
+vert_units <- "number of pixels"
+
+# Next, pass the variables to the dataPreview function.
+# NB: xAngle sets the orientation of the horizontal axis labels. See help file for more details.
+dataPreview(rasstackY,
+            timepoints = tps,
+            vertunits = vert_units,
+            xAngle = 0)
+```
+
+
+## Calling the `presenceData` function
+The **presenceData** function creates data for the variable's number of presence and change. Type "?presenceData" in your R console to see the help file.
+Output from the **presenceData** function serves as input data for the **presencePlot** function.
+```{r, eval=TRUE, warning=FALSE}
+# The function takes tw parameters: a raster stack and the value to flag as NA the default is -999
+# Let's create the data for the rasstackY data
+num_pres_change <- presenceData(rasstackY, nodata = -999)
+
+# Let's take a look.
+num_pres_change
+```
+
+The **presencePlot** function creates a map of the number of presence and changes for the variable of interest. 
+Type "?presencePlot" in your R console to see the help file.
+Bilintoh, Thomas Mumuni, and Robert G Jr. Pontius. “Methods to Compare Sites Concerning a Category's Change During Various Time Intervals.” forthcoming.
+provide more information about the eight types of trajectories and the concept of the unified size
+```{r, eval=TRUE, warning=FALSE}
+# Let's pass thenum_pres_change we created to the presencePlot function.
+# 4326
+presencePlot(num_pres_change,
+             pltunit = "m",
+             dataEpsg = 32632,
+             scalePos = "bottomright",
+             narrowPos = "topleft",
+             narrowSize = 1,
+             categoryName = "forest",
+             xAxis = "Longitude (m)",
+             yAxis = "Latitude (m)",
+             axisText = 1,
+             axisLabel = 1,
+             plotTitle = 1.2)
+
+```
+
+The **rastertrajData** function creates the data which serves as input for the **trajPlot** function. The output data comprises 
+a raster map, pie chart, and corresponding attribute information such as colors and size.
+Type "?rastertrajData" in your R console to see the help file.
+
+```{r, eval=TRUE, warning=FALSE}
+# Let's cteae trajectory data foe the rasstackY data.
+# zeroabsence is a string of "yes" or "no" indicating if 0 means absence. The default is "yes".
+# unified is a string of "yes" or "no" indicating if the analysis involves the unified size. 
+# The unified size is the union of the locations where the category exists at any time point. The default is "yes"
+# user_spatial is an integer for the user-defined spatial extent. Default is 0.
+# Type "?presencePlot"  in your R console to see the help file that describes all the parameters in the function.
+traj_data <- rastertrajData(rasstackY,
+                            zeroabsence = 'yes',
+                            unified = "yes",
+                            user_spatial = 0)
+# Let's take a look.
+traj_data
+```
+
+The **trajPlot** function creates the data which serves as input for the **trajPlot** function. The output data comprises 
+a raster map, pie chart, and corresponding attribute information such as colors and size.
+Type "?rastertrajData" in your R console to see the help file.
+
+```{r, eval=TRUE, warning=FALSE}
+# pass traj_data we created to the trajPlot function.
+# Apart from the input, all the parameters are the same as the parameters for the presencePlot function
+trajPlot(traj_data,
+         pltunit = "m",
+         dataEpsg = 32632,
+         categoryName = "marsh's",
+         scalePos = "bottomright",
+         narrowPos = "topleft",
+         narrowSize = 0.6,
+         xAxis = "Longitude (m)",
+         yAxis = "Latitude (m)",
+         axisText = 1.2,
+         axisLabel = 1.4,
+         plotTitle = 1.5,
+         legendTex = 0.9)
+```
+
+The **rasterstackData** function creates results that serve as input for the **stackbarPlot** function. The output data comprises 
+data frames and corresponding attribute information such as colors and unified size, average gross gain, and average gross loss. 
+Type "?rasterstackData" in your R console to see the help file.
+```{r, eval=TRUE, warning=FALSE}
+# Let's cteae stacked bar data foe the rasstackY data.
+# Create a vector for the time points.
+tps = c(2000,2001,2002,2003,2005)
+
+# I know the units of my varibel is number of pixels, thus I will create a sting for the vertical units.
+vert_units <- "number of pixels"
+# zeroabsence is a string of "yes" or "no" indicating if 0 means absence. The default is "yes".
+# unified is a string of "yes" or "no" indicating if the analysis involves the unified size. 
+# The unified size is the union of the locations where the category exists at any time point. The default is "yes"
+# categoryName is a character representing the name of the category of interest.Default is "category"
+# regionName is a string or character the name of the study region.
+# Type "?rasterstackData"  in your R console to see the help file that describes all the parameters in the function.
+stackbar_data <- rasterstackData(rasstackY,
+                                 timePoints = c(2000,2001,2002,2003,2005),
+                                 unified = 'yes',
+                                 zeroabsence = 'yes',
+                                 categoryName = 'forest',
+                                 regionName = 'region')
+# Let's take a look.
+stackbar_data
+```
+The **stackbarPlot** function creates stack bar plots showing gross losses and gains of the trajectories and the three change components.
+Type "?stackbarPlot" in your R console to see the help file.
+
+```{r, eval=TRUE, warning=FALSE}
+# pass stackbar_data we created to the stackbarPlot function.
+
+# axisSize is a numerical value that control the size of the labels on tick marks of the horizontal and vertical tick marks.
+# lbAxSize is a numerical value to control the size of the labels on the horizontal and vertical axis.
+# lgSize is a numerical value to control the size of the legend text.
+# titleSize is a numerical value to control the size of the title text.
+# datbreaks is a string of "yes" or "no", which controls the range and sub-division of the vertical axis
+# of the stacked bar plots.The default is "no", which automatically generates the range and interval of the vertical axis.
+# If "no" the user need to mannual input values for "upperlym","lowerlym", "lymby","upperlym2", and "lymby2".
+# pperlym if datbreaks set to "yes," is a numerical value to control the upper limit of the trajectory stack bar plot.
+# lowerlym if datbreaks set to "yes," is a numerical value to control the lower limit of the trajectory stack bar plot.
+# lymby if datbreaks set to "yes," is a numerical value to control interval on the vertical axis of the components of change stack bar plot.
+# upperlym2 if datbreaks set to "yes," is a numerical value to control the upper limit of the components of change stacked bar plot.
+# lymby2 if datbreaks set to "yes," is a numerical value to control the interval on the vertical axis of the components of change stacked bar plot.
+# xAngle  is a numerical value to control the orientation of the text on the vertical axis of the trajectory stack bar plot.
+stackbarPlot(stackbar_data,
+             axisSize = 10,
+             lbAxSize = 10,
+             lgSize = 7.5,
+             titleSize = 12,
+             datbreaks = "no",
+             upperlym = 35,
+             lowerlym = - 50,
+             lymby = 5,
+             upperlym2 = 0.5,
+             lymby2 = 0.1,
+             xAngle = 0)
+```
+
+## References
+Pontius Jr, R. G. (2022). Metrics That Make a Difference: How to Analyze Change and Error. Springer Nature Switzerland AG.
+
+Bilintoh, T.M., Korah, A., Opuni, A., & Akansobe, A., (2022). Comparing the Trajectory of Urban Impervious Surface in Two Cities: 
+The Case of Accra and Kumasi , Ghana. Land,  12 (927), 14. 
+
+Pontius Jr, R. G., Krithivasan, R., Sauls, L., Yan, Y., & Zhang, Y. (2017). Methods to summarize change among land
+categories across time intervals. Journal of Land Use Science, 12(4), 218–230. 
+
+

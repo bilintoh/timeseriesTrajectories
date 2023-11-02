@@ -1,4 +1,4 @@
-#' Create data for number of presence and change.
+#' Create data for the number of presence and change.
 #' @param x is the data raster stack.
 #' @param nodata is the interger that shows NA in the raster stack.
 #' @import terra
