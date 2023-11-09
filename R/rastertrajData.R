@@ -370,9 +370,19 @@ rastertrajData <- function(x,
     dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
 
   }
+  dfattribute1 <- left_join(df3, dfPie2, by = "ID")
+
+  dfattribute2 <- dfattribute1[1:3]
+
+  dfattribute3 <- dfattribute1[6:6]
+
+  dfattribute3[is.na(dfattribute3)] <- 0
+
+  dfattribute4 <- cbind(dfattribute2,dfattribute3)
+
   close(pb)
   return(list("Raster data for trajectory plot" = dfr,
               "Attribute data for trajectory plot" = df3,
-              "Data for trajectory pie chart" = dfPie2,
+              "Data for trajectory pie chart" = dfattribute4,
               "Number of time points" = ncl_noxy))
 }

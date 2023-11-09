@@ -171,14 +171,14 @@ Type "?rasterstackData" in your R console to see the help file.
 # Create a vector for the time points.
 tps = c(2000,2001,2002,2003,2005)
 
-# I know the units of my varibel is number of pixels, thus I will create a sting for the vertical units.
+# I know the units of my variable is number of pixels, thus I will create a sting for the vertical units.
 vert_units <- "number of pixels"
-# zeroabsence is a string of "yes" or "no" indicating if 0 means absence. The default is "yes".
-# unified is a string of "yes" or "no" indicating if the analysis involves the unified size. 
-# The unified size is the union of the locations where the category exists at any time point. The default is "yes"
-# categoryName is a character representing the name of the category of interest.Default is "category"
-# regionName is a string or character the name of the study region.
-# Type "?rasterstackData"  in your R console to see the help file that describes all the parameters in the function.
+# zeroabsence is a string of "yes" or "no" indicating whether 0 indicates absence or not. default is "yes" meaning 0 means absence.
+# timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
+# annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
+# the duration of the time interval. Default is "no"
+# categoryName is a character representing the name of the category of interest. Default is "category"
+# regionName is a string or character the name of the study region. Default is "region"
 stackbar_data <- rasterstackData(rasstackY,
                                  timePoints = c(2000,2001,2002,2003,2005),
                                  spatialextent = 'unified',

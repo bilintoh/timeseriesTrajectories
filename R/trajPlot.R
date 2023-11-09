@@ -103,7 +103,7 @@ trajPlot <- function(input,
                   clockwise = TRUE,
                   labels = "",
                   col=as.character(input[[3]]$myCol ),
-                  main = "Size of trajectories",
+                  main = "Size of trajectories. The legend shows trajectories for the map and pie chart",
                   cex = plotTitle)
     graphics::legend("topright",
                      title = "Trajectories",

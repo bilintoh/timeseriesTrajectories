@@ -1,6 +1,6 @@
 #' This function will allow the user to create a time series plot of the data.
 #' @param x is the data which must be a rasterstack.
-#' @param timepoints is a vector of numerical values represneting your time points.
+#' @param timepoints is a vector of numerical values representing your time points.
 #' @param vertunits is a string that states the units of the y values.
 #' @param xAngle is the orientation for the vertical axis labels. The default is 90.
 #' @import ggplot2
