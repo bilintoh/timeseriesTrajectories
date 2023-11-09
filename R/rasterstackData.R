@@ -1,15 +1,17 @@
 #' Creates results that serve as input for the stackbarPlot function.
-#' @param x is the data, which must be a SpatRaste.
-#' @param unified is a string, which can be "yes" or "no" only. If "yes," the change is a percentage of a region's
+#' @param x is the data, which must be a SpatRaste. Default is "unified"
+#' @param spatialextent is can be "unified", or any integer defined by the user. If "unified," the change is a percentage of unified region,
+#' if user defined integer, the results are in the user’s desired units.
 #' unified area; else, the change is a percentage of the  entire region under consideration.
-#' @param zeroabsence is a string indicating whether 0 indicates basence or not
+#' @param zeroabsence is a string of "yes" or "no" indicating whether 0 indicates basence or not. default is "yes" meaning 0 means absence.
 #' @param timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
-#' @param categoryName is a character representing the name of the category of interest.Default is "category"
-#' @param regionName is a string or character the name of the study region.
+#' @param annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
+#' the duration of the time interval. Defualt is "no"
+#' @param categoryName is a character representing the name of the category of interest. Default is "category"
+#' @param regionName is a string or character the name of the study region. Default is "region"
 #' @import dplyr
 #' @import terra
 #' @import progress
-#' @import sf
 #' @import reshape2
 #' @importFrom stats var
 #' @importFrom utils setTxtProgressBar txtProgressBar
@@ -17,8 +19,9 @@
 #' @export
 rasterstackData <- function(x,
                             timePoints = c(2000,2001,2002,2003,2005),
-                            unified = 'yes',
+                            spatialextent = 'unified',
                             zeroabsence = 'yes',
+                            annualchange = 'yes',
                             categoryName = 'variable',
                             regionName = 'region'){
 
@@ -33,12 +36,19 @@ rasterstackData <- function(x,
   if (!class(x) %in% c("SpatRaster")){
     stop("This function is intended for SpatRasters only", call. = FALSE)
   }
-  if (!unified %in% c('no','yes')){
-    stop("unified must have a yes or no input", call. = FALSE)
-  }
+  # if (!spatial_extent %in% c(1, 'unified','personalized')){
+  #   stop("spatial_extent must have a 1, unified or personalized input", call. = FALSE)
+  # }
   if (!zeroabsence %in% c('no','yes')){
     stop("zeroabsence must have a yes or no input", call. = FALSE)
   }
+  if (!annualchange %in% c('no','yes')){
+    stop("annualchange must have a yes or no input", call. = FALSE)
+  }
+  # if (!data_unit %in% c(1, 'm','f')){
+  #   stop("data_unit reuires 1, m or f input", call. = FALSE)
+  # }
+
 
 
   d_gains <- vector('list', j$n) # for gains
@@ -54,6 +64,13 @@ rasterstackData <- function(x,
   k <- ncl_noxy + 2
   v <- ncl_noxy - 1
 
+
+  clone2 <- data.frame(matrix(1, nrow = 1,ncol = length(1:ncl_noxy)))/j$n
+
+  #This will result in erroe if unified is slected.
+  #clone3 <- data.frame(matrix(spatial_extent, nrow = 1,ncol = length(1:ncl_noxy)))/j$n
+
+
   for (i in seq_along(j$row)) {
     terra::readStart(x)
 
@@ -65,159 +82,163 @@ rasterstackData <- function(x,
     d3<- abs(sum(d[ncl_noxy] - d[1]))
 
     sumLastFirst_2[[i]] <- d3
+
     #l <- x[[4]] - 3
-    if(unified == "yes" & zeroabsence == "yes"){
-      lengthSpext[[i]] <- filter_all(d[1:ncl_noxy], any_vars(. > 0))
+    if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
       #lengthSpext <- sum(sapply(lengthSpext, nrow))
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
-    } else {
-      lengthSpext[[i]] <- nrow(d)
-      stackTitle <- paste("Change in extent where any time point is",categoryName,"category in",regionName)
+    } else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    } else if(!spatialextent %in% c('unified', 1) & zeroabsence == "yes" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      # For situations with spatial zeroabsence == no
+    } else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'no'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName) # Need to update to refelect correct units
+      # For situations with spatial annualchange == no
+    }else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'yes'){
+      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'yes'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'yes'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+    }else if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'yes'){
+      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
+      #lengthSpext <- sum(sapply(lengthSpext, nrow))
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
     }
 
-    if (ncl_noxy == 2){
-      input2 <- d[-1] - d[-ncol(d)]
-      clone <- data.frame(matrix(0, nrow = 1,ncol = 1))
-      names(clone) <- names(input2[,1:1])
+    # firstTime <- d[[1]]
+    # lastTime <- d[[ncl_noxy]]
+    # diffLastFirst <- lastTime - firstTime
+    # sumLastFirst[[i]] <- sum(abs(diffLastFirst))
 
-      #Tajectry type 1 (Loss Without Alternation)
-      traj <- input2 %>% subset(input2 < 0 )
-      if (nrow(traj) == 0){
-        seg1GainRed <- as.data.frame(colSums(clone))
-        seg1LossRed <- as.data.frame(colSums(clone))
-      }else{
-        traj <- t(na.omit(traj))
-        seg1GainRed <- as.data.frame(sum(traj[which(traj>0)]))
-        seg1LossRed <- as.data.frame(sum(traj[which(traj<0)]))
-      }
+    #input2 <- round(d[1:as.numeric(ncl_noxy)][-1] -
+    #d[1:as.numeric(ncl_noxy)][-ncol(d[1:as.numeric(ncl_noxy)])],digits = 4)
 
+    input2 <- d[-1] - d[-ncol(d)]
+
+    input2 <- cbind(input2,d[,1],d[,ncl_noxy])
+
+    input2 <-  input2[!apply(input2[,1:v] == 0, 1, all),]
+
+
+    input2 <- mutate(input2,
+                     pos_index = apply(input2[,1:v] > 0, 1, which.max), # positive index
+                     neg_index = apply(input2[,1:v] < 0, 1, which.max),
+                     pos = rowSums(input2[,1:v] > 0),
+                     neg = rowSums(input2[,1:v] < 0),
+                     pos_uni = apply(input2[,1:v], 1, function(x) sum(unique(na.omit(x)) > 0)),
+                     neg_uni = apply(input2[,1:v], 1, function(x) sum(unique(na.omit(x)) < 0))) #negativ index
+    #Create a dummy data
+    clone <- data.frame(matrix(0, nrow = 1,ncol = length(input2[,1:v])))
+    names(clone) <- names(input2[,1:v])
+
+
+
+    #Tajectry type 1
+    traj<-input2 %>% subset(input2[ncl_noxy] >  input2[,m] &
+                              pos == 0 &
+                              neg >= 1)
+    if (nrow(traj) == 0){
+      seg1GainRed <- as.data.frame(colSums(clone))
+      seg1LossRed <- as.data.frame(colSums(clone))
+    }else{
+      traj <- t(na.omit(traj[,1:v]))
+      seg1GainRed <- as.data.frame(apply(traj,1,function(x) sum(x[which(x>0)])))
+      seg1LossRed <- as.data.frame(apply(traj,1,function(x) sum(x[which(x<0)])))
+    }
+
+    #Tajectry type 2
+    traj2<-input2 %>% subset(input2[ncl_noxy] > input2[,m] &
+                               #pos_index < neg_index &
+                               pos >= 1 &
+                               neg  >= 1)
+
+
+    if (nrow(traj2) == 0){
       seg2GainRed2 <- as.data.frame(colSums(clone))
       seg2LossRed2 <- as.data.frame(colSums(clone))
-
-      #Tajectry type 3 (Gain Without Alternation)
-      traj3 <- input2 %>% subset(input2 > 0 )
-      if (nrow(traj3) == 0){
-        seg3GainBlue <- as.data.frame(colSums(clone))
-        seg3LossBlue <- as.data.frame(colSums(clone))
-      }else{
-        traj3 <- t(na.omit(traj3))
-        seg3GainBlue <- as.data.frame(sum(traj3[which(traj3>0)]))
-        seg3LossBlue <- as.data.frame(sum(traj3[which(traj3<0)]))
-      }
-
-      seg4GainBlue2 <- as.data.frame(colSums(clone))
-      seg4LossBlue2 <- as.data.frame(colSums(clone))
-
-
-      seg5GainBrown <- as.data.frame(colSums(clone))
-      seg5LossBrown <- as.data.frame(colSums(clone))
-
-      seg6GainBrown <- as.data.frame(colSums(clone))
-      seg6LossBrown <- as.data.frame(colSums(clone))
     }else{
-      input2 <- d[-1] - d[-ncol(d)]
+      traj2 <- t(na.omit(traj2[,1:v]))
+      seg2GainRed2 <- as.data.frame(apply(traj2,1,function(x) sum(x[which(x>0)])))
+      seg2LossRed2 <- as.data.frame(apply(traj2,1,function(x) sum(x[which(x<0)])))
 
-      input2 <- cbind(input2,d[,1],d[,ncl_noxy])
-
-      input2 <-  input2[!apply(input2[,1:v] == 0, 1, all),]
+    }
 
 
-      input2 <- mutate(input2,
-                       pos_index = apply(input2[,1:v] > 0, 1, which.max), # positive index
-                       neg_index = apply(input2[,1:v] < 0, 1, which.max),
-                       pos = rowSums(input2[,1:v] > 0),
-                       neg = rowSums(input2[,1:v] < 0),
-                       pos_uni = apply(input2[,1:v], 1, function(x) sum(unique(na.omit(x)) > 0)),
-                       neg_uni = apply(input2[,1:v], 1, function(x) sum(unique(na.omit(x)) < 0))) #negativ index
-      #Create a dummy data
-      clone <- data.frame(matrix(0, nrow = 1,ncol = length(input2[,1:v])))
-      names(clone) <- names(input2[,1:v])
+    #Tajectry type 3
+    traj3 <- input2 %>% subset(pos >= 1 &
+                                 neg == 0)
+    if (nrow(traj3) == 0){
+      seg3GainBlue <- as.data.frame(colSums(clone))
+      seg3LossBlue <- as.data.frame(colSums(clone))
+    }else{
+      traj3 <- t(na.omit(traj3[,1:v]))
+      seg3GainBlue <- as.data.frame(apply(traj3,1,function(x) sum(x[which(x>0)])))
+      seg3LossBlue <- as.data.frame(apply(traj3,1,function(x) sum(x[which(x<0)])))
+    }
 
-      #Tajectry type 1
-      traj<-input2 %>% subset(input2[ncl_noxy] >  input2[,m] &
-                                pos == 0 &
-                                neg >= 1)
-      if (nrow(traj) == 0){
-        seg1GainRed <- as.data.frame(colSums(clone))
-        seg1LossRed <- as.data.frame(colSums(clone))
-      }else{
-        traj <- t(na.omit(traj[,1:v]))
-        seg1GainRed <- as.data.frame(apply(traj,1,function(x) sum(x[which(x>0)])))
-        seg1LossRed <- as.data.frame(apply(traj,1,function(x) sum(x[which(x<0)])))
-      }
-
-      #Tajectry type 2
-      traj2<-input2 %>% subset(input2[ncl_noxy] > input2[,m] &
+    #Tajectry type 4
+    traj4 <- input2 %>% subset(input2[ncl_noxy] < input2[,m] &
                                  #pos_index < neg_index &
                                  pos >= 1 &
                                  neg  >= 1)
+    if (nrow(traj4) == 0){
+      seg4GainBlue2 <- as.data.frame(colSums(clone))
+      seg4LossBlue2 <- as.data.frame(colSums(clone))
+    }else{
+      traj4 <- t(na.omit(traj4[1:v]))
+      seg4GainBlue2 <- as.data.frame(apply(traj4,1,function(x) sum(x[which(x>0)])))
+      seg4LossBlue2 <- as.data.frame(apply(traj4,1,function(x) sum(x[which(x<0)])))
+      #traj4 <- as.data.frame(colSums(traj4[,1:l] != 0 ))
+    }
 
+    #Tajectry type 5:
+    traj5 <- input2 %>% subset(input2[,ncl_noxy]==input2[,m] &
+                                 rowSums(input2[,1:v]) == 0 &
+                                 pos_index > neg_index)
+    if (nrow(traj5) == 0){
+      traj5 <- clone
+      seg5GainBrown <- as.data.frame(colSums(clone))
+      seg5LossBrown <- as.data.frame(colSums(clone))
+    }else{
+      traj5 <- t(na.omit(traj5[,1:v]))
+      seg5GainBrown <- as.data.frame(apply(traj5,1,function(x) sum(x[which(x>0)])))
+      seg5LossBrown <- as.data.frame(apply(traj5,1,function(x) sum(x[which(x<0)])))
+    }
 
-      if (nrow(traj2) == 0){
-        seg2GainRed2 <- as.data.frame(colSums(clone))
-        seg2LossRed2 <- as.data.frame(colSums(clone))
-      }else{
-        traj2 <- t(na.omit(traj2[,1:v]))
-        seg2GainRed2 <- as.data.frame(apply(traj2,1,function(x) sum(x[which(x>0)])))
-        seg2LossRed2 <- as.data.frame(apply(traj2,1,function(x) sum(x[which(x<0)])))
-
-      }
-
-
-      #Tajectry type 3
-      traj3 <- input2 %>% subset(pos >= 1 &
-                                   neg == 0)
-      if (nrow(traj3) == 0){
-        seg3GainBlue <- as.data.frame(colSums(clone))
-        seg3LossBlue <- as.data.frame(colSums(clone))
-      }else{
-        traj3 <- t(na.omit(traj3[,1:v]))
-        seg3GainBlue <- as.data.frame(apply(traj3,1,function(x) sum(x[which(x>0)])))
-        seg3LossBlue <- as.data.frame(apply(traj3,1,function(x) sum(x[which(x<0)])))
-      }
-
-      #Tajectry type 4
-      traj4 <- input2 %>% subset(input2[ncl_noxy] < input2[,m] &
-                                   #pos_index < neg_index &
-                                   pos >= 1 &
-                                   neg  >= 1)
-      if (nrow(traj4) == 0){
-        seg4GainBlue2 <- as.data.frame(colSums(clone))
-        seg4LossBlue2 <- as.data.frame(colSums(clone))
-      }else{
-        traj4 <- t(na.omit(traj4[1:v]))
-        seg4GainBlue2 <- as.data.frame(apply(traj4,1,function(x) sum(x[which(x>0)])))
-        seg4LossBlue2 <- as.data.frame(apply(traj4,1,function(x) sum(x[which(x<0)])))
-        #traj4 <- as.data.frame(colSums(traj4[,1:l] != 0 ))
-      }
-
-      #Tajectry type 5:
-      traj5 <- input2 %>% subset(input2[,ncl_noxy]==input2[,m] &
-                                   rowSums(input2[,1:v]) == 0 &
-                                   pos_index > neg_index)
-      if (nrow(traj5) == 0){
-        traj5 <- clone
-        seg5GainBrown <- as.data.frame(colSums(clone))
-        seg5LossBrown <- as.data.frame(colSums(clone))
-      }else{
-        traj5 <- t(na.omit(traj5[,1:v]))
-        seg5GainBrown <- as.data.frame(apply(traj5,1,function(x) sum(x[which(x>0)])))
-        seg5LossBrown <- as.data.frame(apply(traj5,1,function(x) sum(x[which(x<0)])))
-      }
-
-      #Tajectry type 6
-      traj6 <- input2 %>% subset(input2[,ncl_noxy] ==  input2[,m] &
-                                   rowSums(input2[,1:v]) == 0 &
-                                   pos_index < neg_index)
-      if (nrow(traj6) == 0){
-        seg6GainBrown <- as.data.frame(colSums(clone))
-        seg6LossBrown <- as.data.frame(colSums(clone))
-      }else{
-        traj6 <- t(na.omit(traj6[,1:v]))
-        seg6GainBrown <- as.data.frame(apply(traj6,1,function(x) sum(x[which(x>0)])))
-        seg6LossBrown <- as.data.frame(apply(traj6,1,function(x) sum(x[which(x<0)])))
-      }
-
+    #Tajectry type 6
+    traj6 <- input2 %>% subset(input2[,ncl_noxy] ==  input2[,m] &
+                                 rowSums(input2[,1:v]) == 0 &
+                                 pos_index < neg_index)
+    if (nrow(traj6) == 0){
+      seg6GainBrown <- as.data.frame(colSums(clone))
+      seg6LossBrown <- as.data.frame(colSums(clone))
+    }else{
+      traj6 <- t(na.omit(traj6[,1:v]))
+      seg6GainBrown <- as.data.frame(apply(traj6,1,function(x) sum(x[which(x>0)])))
+      seg6LossBrown <- as.data.frame(apply(traj6,1,function(x) sum(x[which(x<0)])))
     }
 
     inter_vals <- names(traj)
@@ -253,9 +274,22 @@ rasterstackData <- function(x,
     lossDf2 <- lossDf %>% rename_at(vars(all_of(oldnamesLoss)), ~ newnamesLoss)
     d_loss[[i]] <- cbind(timeIntervals,lossDf2)
 
+
+    #Sys.sleep(0.00002)
+    #Sys.sleep(0.00001)
+    #setTxtProgressBar(pb, i)
+
     Sys.sleep(1)
     #end[i] <- Sys.time()
     setTxtProgressBar(pb, i)
+    #time <- round(seconds_to_period(sum(end - init)), 0)
+    #
+    # Estimated remaining time based on the
+    # mean time that took to run the previous iterations
+    #est <- j$n * (mean(end[end != 0] - init[init != 0])) - time
+    #remainining <- round(seconds_to_period(est), 0)
+    # cat(paste(" // Execution time:", time,
+    #           " // Estimated time remaining:", remainining), "")
 
     terra::readStop(x)
 
@@ -267,16 +301,42 @@ rasterstackData <- function(x,
   d_gains <- Reduce('+', d_gains)
   d_gains$X2 <- d_gains$X2 / j$n
 
-  lengthSpext <- sum(sapply(lengthSpext, nrow))
+
+  if(!spatialextent %in% c('unified', 1)){
+    lengthSpext <- Reduce('+', lengthSpext) * spatialextent
+  }else {
+    lengthSpext <- Reduce('+', lengthSpext)
+  }
 
   sumLastFirst <- Reduce('+', sumLastFirst)
-
   sumLastFirst_2 <- Reduce('+', sumLastFirst_2)
+
+
+
+
   #############################################################################
-  gainStack <- (d_gains[-1]/(d_gains$X2* lengthSpext))*100
-  gainStack$timeIntervals <- d_gains$X2
-  lossStack<- (d_loss[-1]*-1/(d_loss$X2* lengthSpext))*100
-  lossStack$timeIntervals <- d_loss$X2
+  if (annualchange == 'yes'){
+    t_extent <- 1
+    gainStack <- (d_gains[-1]/(t_extent * lengthSpext)) * 100
+    gainStack$timeIntervals <- d_gains$X2
+
+    lossStack<- ((d_loss[-1] * -1)/(t_extent * lengthSpext)) * 100
+    lossStack$timeIntervals <- d_loss$X2
+
+
+  }else{
+    t_extent <- timePoints[ncl_noxy] - timePoints[1]
+
+    gainStack <- (d_gains[-1]/(d_gains$X2 * lengthSpext)) * 100
+    gainStack$timeIntervals <- d_gains$X2
+
+    lossStack<- (d_loss[-1]*-1/(d_loss$X2 * lengthSpext)) * 100
+    lossStack$timeIntervals <- d_loss$X2
+  }
+  # gainStack <- (d_gains[-1]/(d_gains$X2* lengthSpext))*100
+  # gainStack$timeIntervals <- d_gains$X2
+  # lossStack<- (d_loss[-1]*-1/(d_loss$X2* lengthSpext))*100
+  # lossStack$timeIntervals <- d_loss$X2
 
   trajNames <- c( "All Alternation Loss First",
                   "All Alternation Gain First",
@@ -312,6 +372,11 @@ rasterstackData <- function(x,
   meltLossGain5$size <- meltLossGain5b$Var2
   prodGainLossInt <- meltLossGain5$value*meltLossGain5$size
 
+  # if (data_unit  == 'f' & spatial_extent == 1){
+  #   area_factor <- (spatial_res[1] *  spatial_res[2]) * 9.2903e-8
+  #   lab_axis <- 'square kilometers'
+  # }
+
   gainLine <- sum(prodGainLossInt[prodGainLossInt > 0])/(timePoints[ncl_noxy] - timePoints[1])
   lossLine <- sum(prodGainLossInt[prodGainLossInt < 0])/(timePoints[ncl_noxy] - timePoints[1])
   net <- (gainLine + lossLine)
@@ -324,7 +389,7 @@ rasterstackData <- function(x,
   }
   netAbs <- abs(net)
 
-  allocation <- (sumLastFirst * (100 / lengthSpext)) / (timePoints[ncl_noxy] - timePoints[1]) - netAbs
+  allocation <- (sumLastFirst * (100/ lengthSpext)) / (timePoints[ncl_noxy] - timePoints[1]) - netAbs
   #dfAlt <- x[[1]][,3:nCl][-1] - x[[1]][,3:nCl][-ncol(x[[1]][,3:nCl])]
   #dfAltSum <- sum(abs(input2))
   alternation <- gainLine - lossLine - allocation - netAbs
@@ -352,6 +417,21 @@ rasterstackData <- function(x,
                         names(trajNames3) <- "trajNames2"
                         nameCol2 <- left_join(trajNames3,nameCol1,by = "trajNames2")
 
+
+                        # end[i] <- Sys.time()
+                        # setTxtProgressBar(progress_bar, value = i)
+                        # time <- round(seconds_to_period(sum(end - init)), 0)
+                        # #
+                        # # Estimated remaining time based on the
+                        # # mean time that took to run the previous iterations
+                        # est <- j$n * (mean(end[end != 0] - init[init != 0])) - time
+                        # remainining <- round(seconds_to_period(est), 0)
+                        # cat(paste(" // Execution time:", time,
+                        #            " // Estimated time remaining:", remainining), "")
+                        #Sys.sleep(0.1) # Remove this line and add your code
+                        #close(progress_bar)
+
+
                         close(pb)
                         return(list("Factor dataframe for trajectory stacke bar plot" = meltLossGain5,
                                     "Value of gain line" = gainLine,
@@ -365,6 +445,4 @@ rasterstackData <- function(x,
                                     sumLastFirst,
                                     sumLastFirst_2,
                                     lengthSpext))
-
-
 }

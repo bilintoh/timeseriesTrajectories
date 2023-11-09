@@ -7,25 +7,30 @@
 rasterstackData(
   x,
   timePoints = c(2000, 2001, 2002, 2003, 2005),
-  unified = "yes",
+  spatialextent = "unified",
   zeroabsence = "yes",
+  annualchange = "yes",
   categoryName = "variable",
   regionName = "region"
 )
 }
 \arguments{
-\item{x}{is the data, which must be a SpatRaste.}
+\item{x}{is the data, which must be a SpatRaste. Default is "unified"}
 
 \item{timePoints}{is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).}
 
-\item{unified}{is a string, which can be "yes" or "no" only. If "yes," the change is a percentage of a region's
+\item{spatialextent}{is can be "unified", or any integer defined by the user. If "unified," the change is a percentage of unified region,
+if user defined integer, the results are in the user’s desired units.
 unified area; else, the change is a percentage of the  entire region under consideration.}
 
-\item{zeroabsence}{is a string indicating whether 0 indicates basence or not}
+\item{zeroabsence}{is a string of "yes" or "no" indicating whether 0 indicates basence or not. default is "yes" meaning 0 means absence.}
 
-\item{categoryName}{is a character representing the name of the category of interest.Default is "category"}
+\item{annualchange}{is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
+the duration of the time interval. Defualt is "no"}
 
-\item{regionName}{is a string or character the name of the study region.}
+\item{categoryName}{is a character representing the name of the category of interest. Default is "category"}
+
+\item{regionName}{is a string or character the name of the study region. Default is "region"}
 }
 \value{
 The output from \code{\link{rasterstackData}}

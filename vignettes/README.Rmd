@@ -1,5 +1,5 @@
 ---
-title: "Trajectories of a varible"
+title: "timeseriesTrajectories"
 author: "Thomas Mumuni Bilintoh"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -181,8 +181,9 @@ vert_units <- "number of pixels"
 # Type "?rasterstackData"  in your R console to see the help file that describes all the parameters in the function.
 stackbar_data <- rasterstackData(rasstackY,
                                  timePoints = c(2000,2001,2002,2003,2005),
-                                 unified = 'yes',
+                                 spatialextent = 'unified',
                                  zeroabsence = 'yes',
+                                 annualchange = "no",
                                  categoryName = 'forest',
                                  regionName = 'region')
 # Let's take a look.

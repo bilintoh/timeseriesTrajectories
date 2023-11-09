@@ -6,7 +6,6 @@
 #' @import dplyr
 #' @import terra
 #' @import progress
-#' @import sf
 #' @importFrom stats var
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom data.table rbindlist
