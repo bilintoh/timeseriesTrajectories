@@ -14,7 +14,7 @@ dataPreview(
 \arguments{
 \item{x}{is the data which must be a rasterstack.}
 
-\item{timepoints}{is a vector of numerical values represneting your time points.}
+\item{timepoints}{is a vector of numerical values representing your time points.}
 
 \item{vertunits}{is a string that states the units of the y values.}
 

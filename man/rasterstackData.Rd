@@ -23,10 +23,10 @@ rasterstackData(
 if user defined integer, the results are in the user’s desired units.
 unified area; else, the change is a percentage of the  entire region under consideration.}
 
-\item{zeroabsence}{is a string of "yes" or "no" indicating whether 0 indicates basence or not. default is "yes" meaning 0 means absence.}
+\item{zeroabsence}{is a string of "yes" or "no" indicating whether 0 indicates absence or not. default is "yes" meaning 0 means absence.}
 
 \item{annualchange}{is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
-the duration of the time interval. Defualt is "no"}
+the duration of the time interval. Default is "no"}
 
 \item{categoryName}{is a character representing the name of the category of interest. Default is "category"}
 

@@ -3,10 +3,10 @@
 #' @param spatialextent is can be "unified", or any integer defined by the user. If "unified," the change is a percentage of unified region,
 #' if user defined integer, the results are in the user’s desired units.
 #' unified area; else, the change is a percentage of the  entire region under consideration.
-#' @param zeroabsence is a string of "yes" or "no" indicating whether 0 indicates basence or not. default is "yes" meaning 0 means absence.
+#' @param zeroabsence is a string of "yes" or "no" indicating whether 0 indicates absence or not. default is "yes" meaning 0 means absence.
 #' @param timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
 #' @param annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
-#' the duration of the time interval. Defualt is "no"
+#' the duration of the time interval. Default is "no"
 #' @param categoryName is a character representing the name of the category of interest. Default is "category"
 #' @param regionName is a string or character the name of the study region. Default is "region"
 #' @import dplyr
@@ -16,16 +16,6 @@
 #' @importFrom stats var
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @return The output from \code{\link{rasterstackData}}
-#' @param x is the data, which must be a SpatRaste. Default is "unified"
-#' @param spatialextent is can be "unified", or any integer defined by the user. If "unified," the change is a percentage of unified region,
-#' if user defined integer, the results are in the user’s desired units.
-#' unified area; else, the change is a percentage of the  entire region under consideration.
-#' @param zeroabsence is a string of "yes" or "no" indicating whether 0 indicates basence or not. default is "yes" meaning 0 means absence.
-#' @param timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
-#' @param annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
-#' the duration of the time interval. Defualt is "no"
-#' @param categoryName is a character representing the name of the category of interest. Default is "category"
-#' @param regionName is a string or character the name of the study region. Default is "region"
 #' @import dplyr
 #' @import terra
 #' @import progress
