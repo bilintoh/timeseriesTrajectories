@@ -34,6 +34,8 @@ the duration of the time interval. Defualt is "no"}
 }
 \value{
 The output from \code{\link{rasterstackData}}
+
+The output from \code{\link{rasterstackData}}
 }
 \description{
 Creates results that serve as input for the stackbarPlot function.

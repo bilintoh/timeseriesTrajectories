@@ -68,8 +68,8 @@ stackbarPlot <- function(input,
     guides(fill = guide_legend(title = "")) +
     geom_abline(slope=0, intercept=0,  col = "grey",size = 0.5) +
     xlab("Time Interval") +
-    ylab = input[[10]]+
-    ggtitle(input[[5]])+
+    ylab(input[[10]])+
+    ggtitle(input[[5]]) +
     theme(
       plot.title = element_text(size = titleSize, face = "bold"))+
     theme(
@@ -110,7 +110,7 @@ stackbarPlot <- function(input,
       panel.background = element_rect(fill = "transparent",colour = NA))+
     theme(axis.text.x=element_blank())+
     xlab("All time intervals") +
-    ylab = input[[10]] +
+    ylab(input[[10]]) +
     ggtitle(input[[5]]) +
     theme(
       plot.title = element_text(size = titleSize, face = "bold"))+

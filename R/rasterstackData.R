@@ -16,8 +16,6 @@
 #' @importFrom stats var
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @return The output from \code{\link{rasterstackData}}
-#' @export
-#' Creates results that serve as input for the stackbarPlot function.
 #' @param x is the data, which must be a SpatRaste. Default is "unified"
 #' @param spatialextent is can be "unified", or any integer defined by the user. If "unified," the change is a percentage of unified region,
 #' if user defined integer, the results are in the user’s desired units.
@@ -91,33 +89,42 @@ rasterstackData <- function(x,
     if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Change (% of region)"
     } else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
     } else if(!spatialextent %in% c('unified', 1) & zeroabsence == "yes" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
+      yaxislable <- "Change (% of region)"
     } else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Change (% of region)"
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
+      yaxislable <- "Change (% of region)"
     }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName) # Need to update to refelect correct units
+      stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
-      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Annual Change (% of region)"
     }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
-      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
-      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)# Need to update to refelect correct units
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- "Annual Change (% of region)"
     }
 
     input2 <- d[-1] - d[-ncol(d)]
@@ -376,6 +383,7 @@ rasterstackData <- function(x,
               "Name of category of ineterst" = categoryName,
               "Dataframe for stackbar plot" = mergLossGain,
               "Colors and trajectories for stacked bars" = nameCol2,
+              "vertical axis labe" = yaxislable,
               sumLastFirst,
               sumLastFirst_2,
               lengthSpext))
