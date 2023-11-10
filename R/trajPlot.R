@@ -43,7 +43,6 @@ trajPlot <- function(input,
     on.exit(graphics::par(op1))
     op2 <- graphics::par(mai = c(1, 1, 1, 3) + 0.1)
     on.exit(graphics::par(op2))
-
     my_data_row <- nrow(input[[1]])
     my_data_col <- ncol(input[[1]])
     df_row <- nrow(input[[2]])
@@ -55,20 +54,20 @@ trajPlot <- function(input,
       terra::plot((input[[1]]),
                   col = as.character(input[[2]]$myCol),
                   breaks = breaks_qt$brks,
-                  #col = as.character(input[[2]]$myCol),
                   legend = F,
                   colNA = "White",
                   main = paste(categoryName, "trajectories","for",
                                input[[4]] - 1,"time intervals.", "White is NA"),
-                  xlab = xAxis,
-                  ylab = yAxis,
+                  xlab = "",
+                  ylab = "",
                   cex.axis =  axisText,
                   cex.lab = axisLabel,
                   cex.main = plotTitle)
+      title(xlab = xAxis, line = 1.5)
+      title(ylab = yAxis, line = 1.5)
       coord <- graphics::par("usr")
       op3 <- graphics::par(xpd = TRUE)
       on.exit(graphics::par(op3))
-
       prettymapr::addscalebar(pltunit,
                               plotepsg  = dataEpsg,
                               pos = scalePos)
@@ -76,23 +75,22 @@ trajPlot <- function(input,
                                 scale = narrowSize)
 
     }else if (df_row == 1 ){
-      #breaks_qt <- classIntervals(input[[2]]$ID,n = length(input[[2]]$ID), warnSmallN = FALSE )
       terra::plot((input[[1]]),
-                   col = as.character(input[[2]]$myCol),
-                   #breaks = breaks_qt$brks,
-                   legend = T,
-                   colNA = "White",
-                   main = paste(categoryName, "trajectories","for",
-                                input[[4]],"time points.", "White is NA"),
-                   xlab = xAxis,
-                   ylab = yAxis,
-                   cex.axis =  axisText,
-                   cex.lab = axisLabel,
-                   cex.main = plotTitle)
+                  col = as.character(input[[2]]$myCol),
+                  legend = F,
+                  colNA = "White",
+                  main = paste(categoryName, "trajectories","for",
+                               input[[4]],"time points.", "White is NA"),
+                  xlab = "",
+                  ylab = "",
+                  cex.axis =  axisText,
+                  cex.lab = axisLabel,
+                  cex.main = plotTitle)
+      title(xlab = xAxis, line = 1.5)
+      title(ylab = yAxis, line = 1.5)
       coord <- graphics::par("usr")
       op3 <- graphics::par(xpd = TRUE)
       on.exit(graphics::par(op3))
-
       prettymapr::addscalebar(pltunit,
                               plotepsg  = dataEpsg,
                               pos = scalePos)
@@ -103,7 +101,7 @@ trajPlot <- function(input,
                   clockwise = TRUE,
                   labels = "",
                   col=as.character(input[[3]]$myCol ),
-                  main = "Size of trajectories. The legend shows trajectories for the map and pie chart",
+                  main = "Size of trajectories. The legend shows trajectories for the map and pie chart.",
                   cex = plotTitle)
     graphics::legend("topright",
                      title = "Trajectories",

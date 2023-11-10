@@ -46,14 +46,12 @@ rastertrajData <- function(x,
   z <- f2 + 1
   z2 <- c(1,z)
 
-  #nCl <- length(d)# number of columns
   ncl_noxy <- nlyr(x)
   m <- ncl_noxy + 1
   k <- ncl_noxy + 2
   s <- ncl_noxy + 3
   v <- ncl_noxy - 1
 
-  #dfxyz <- vector('list', j$n)
   unified_size <- vector('list', j$n)
   lst_trajdf <- vector('list', j$n)
   clone1 <- data.frame(matrix(0, nrow = 1,ncol = 3))
@@ -295,7 +293,6 @@ rastertrajData <- function(x,
     dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
     dfPie2 <- subset(dfPie2, ID!= 8)
 
-    #stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
   } else if(unified == "yes" & zeroabsence == "yes" & user_spatial != 0){
 
     colnames(rat) <- "ID"
@@ -335,7 +332,6 @@ rastertrajData <- function(x,
     diff_spatial <- user_spatial - sum(dfPie2$value)
     dfPie2 <- rbind(dfPie2, c(8, '#c4c3c0', "Stable Absence", diff_spatial))
 
-    #stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
   } else {
     colnames(rat) <- "ID"
     cl <-

@@ -56,12 +56,10 @@ rasterstackData <- function(x,
   d2 <- vector('list', j$n)
   sumLastFirst_2 <- vector('list', j$n)
 
-  #nCl <- nlyr(x) +2# number of columns
   ncl_noxy <- nlyr(x)
   m <- ncl_noxy + 1
   k <- ncl_noxy + 2
   v <- ncl_noxy - 1
-
 
   clone2 <- data.frame(matrix(1, nrow = 1,ncol = length(1:ncl_noxy)))/j$n
 
@@ -262,7 +260,6 @@ rasterstackData <- function(x,
   d_gains <- Reduce('+', d_gains)
   d_gains$X2 <- d_gains$X2 / j$n
 
-
   if(!spatialextent %in% c('unified', 1)){
     lengthSpext <- Reduce('+', lengthSpext) * spatialextent
   }else {
@@ -271,7 +268,6 @@ rasterstackData <- function(x,
 
   sumLastFirst <- Reduce('+', sumLastFirst)
   sumLastFirst_2 <- Reduce('+', sumLastFirst_2)
-  #############################################################################
   if (annualchange == 'yes'){
     t_extent <- 1
     gainStack <- (d_gains[-1]/(t_extent * lengthSpext)) * 100
@@ -279,7 +275,6 @@ rasterstackData <- function(x,
 
     lossStack<- ((d_loss[-1] * -1)/(t_extent * lengthSpext)) * 100
     lossStack$timeIntervals <- d_loss$X2
-
 
   }else{
     t_extent <- timePoints[ncl_noxy] - timePoints[1]
@@ -328,6 +323,7 @@ rasterstackData <- function(x,
   gainLine <- sum(prodGainLossInt[prodGainLossInt > 0])/(timePoints[ncl_noxy] - timePoints[1])
   lossLine <- sum(prodGainLossInt[prodGainLossInt < 0])/(timePoints[ncl_noxy] - timePoints[1])
   net <- (gainLine + lossLine)
+
   if (net < 0){
     Net <- "Quantity Loss"
   } else if (net > 0){
@@ -356,10 +352,8 @@ rasterstackData <- function(x,
   trajCol <- c('#a8a803','#e6e600','#14a5e3',
                         '#ff6666','#020e7a','#941004')
                         nameCol1 <- as.data.frame(cbind(trajNames2,trajCol))
-                        #trajNames3 <- mergLossGain[1:6][, colSums(mergLossGain[1:6] != 0) > 0]
                         trajNames3 <- colSums(abs(mergLossGain[1:6]))
                         trajNames3 <- as.data.frame(names(trajNames3[trajNames3!=0]))
-                        #print(mergLossGain)
                         names(trajNames3) <- "trajNames2"
                         nameCol2 <- left_join(trajNames3,nameCol1,by = "trajNames2")
 

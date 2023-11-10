@@ -18,7 +18,6 @@ dataPreview <- function(x,
   #create a data frame containing the data
   df <- data.frame(anualProp,timepoints)
   maxsize <- max(df[,1])
-
   # create plot for data
   vertlab <- paste0("Size",'', "(","as",' ', vertunits,")")
   horizlab <- "Time"
@@ -27,7 +26,6 @@ dataPreview <- function(x,
     geom_line(aes(timepoints))+
     geom_point()+
     scale_x_continuous(labels=as.character(df[,2]),breaks=df[,2])+
-    #scale_y_continuous(expand = c(0,0),limits = c(470815,maxsize + (maxsize/10)))+
     labs(y= vertlab, x = horizlab)+
     ggtitle("Size of variable at each time point")+
     theme(
@@ -46,7 +44,5 @@ dataPreview <- function(x,
           legend.position= 'bottom',
           legend.title=element_text(size=18,face="bold"),
           legend.text = element_text( size = 12, face = "bold"))
-  #scale_y_continuous(expand = c(0,0))
-
   return(p)
 }
