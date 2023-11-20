@@ -68,6 +68,9 @@ rasterstackData <- function(x,
 
     d <- na.omit(terra::readValues(x, row = j$row[i], nrows = j$nrows[i], dataframe = T))
 
+    newdf <- d
+    newdf$max <- apply(newdf, 1, max, na.rm = TRUE)
+
     d2 <- sum(abs(d[ncl_noxy] - d[1]))
     sumLastFirst[[i]] <- d2
 
@@ -75,7 +78,7 @@ rasterstackData <- function(x,
     sumLastFirst_2[[i]] <- d3
 
     if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'no'){
-      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
+      lengthSpext <- sum(unlist(lengthSpext))
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Change (% of region)"
     } else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'no'){
@@ -98,7 +101,7 @@ rasterstackData <- function(x,
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'yes'){
-      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
+      lengthSpext <- sum(unlist(lengthSpext))
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'yes'){
@@ -110,7 +113,7 @@ rasterstackData <- function(x,
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'yes'){
-      lengthSpext[[i]] <- nrow(filter_all(d[1:ncl_noxy], any_vars(. > 0)))
+      lengthSpext <- sum(unlist(lengthSpext))
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }
@@ -261,9 +264,9 @@ rasterstackData <- function(x,
   d_gains$X2 <- d_gains$X2 / j$n
 
   if(!spatialextent %in% c('unified', 1)){
-    lengthSpext <- Reduce('+', lengthSpext) * spatialextent
+    lengthSpext <- lengthSpext <- sum(unlist(lengthSpext)) * spatialextent
   }else {
-    lengthSpext <- Reduce('+', lengthSpext)
+    lengthSpext <- sum(unlist(lengthSpext))
   }
 
   sumLastFirst <- Reduce('+', sumLastFirst)
