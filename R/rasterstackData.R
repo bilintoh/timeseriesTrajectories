@@ -271,7 +271,7 @@ rasterstackData <- function(x,
 
   sumLastFirst <- Reduce('+', sumLastFirst)
   sumLastFirst_2 <- Reduce('+', sumLastFirst_2)
-  if (annualchange == 'yes'){
+  if (annualchange == 'no'){
     t_extent <- 1
     gainStack <- (d_gains[-1]/(t_extent * lengthSpext)) * 100
     gainStack$timeIntervals <- d_gains$X2
