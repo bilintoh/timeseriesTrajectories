@@ -78,7 +78,7 @@ rasterstackData <- function(x,
     sumLastFirst_2[[i]] <- d3
 
     if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'no'){
-      lengthSpext <- sum(unlist(newdf$max))
+      lengthSpext[[i]] <- sum(unlist(newdf$max))
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Change (% of region)"
     } else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'no'){
@@ -101,7 +101,7 @@ rasterstackData <- function(x,
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "no" & annualchange == 'yes'){
-      lengthSpext <- sum(unlist(newdf$max))
+      lengthSpext[[i]] <- sum(unlist(newdf$max))
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'yes'){
@@ -113,7 +113,7 @@ rasterstackData <- function(x,
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }else if(spatialextent == "unified" & zeroabsence == "yes" & annualchange == 'yes'){
-      lengthSpext <- sum(unlist(newdf$max))
+      lengthSpext[[i]] <- sum(unlist(newdf$max))
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
     }
