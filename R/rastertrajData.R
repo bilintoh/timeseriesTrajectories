@@ -331,6 +331,7 @@ rastertrajData <- function(x,
     dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
     diff_spatial <- user_spatial - sum(dfPie2$value)
     dfPie2 <- rbind(dfPie2, c(8, '#c4c3c0', "Stable Absence", diff_spatial))
+    dfPie2$ID <- as.numeric(dfPie2$ID)
 
   } else {
     colnames(rat) <- "ID"
