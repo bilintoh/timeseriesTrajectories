@@ -16,7 +16,8 @@ dataPreview <- function(x,
   names(anualProp) <- 'anualProp'
 
   #create a data frame containing the data
-  df <- data.frame(anualProp,timepoints)
+  df <- data.frame(cbind(anualProp,timepoints))
+  rownames(df) <- NULL
   maxsize <- max(df[,1])
   # create plot for data
   vertlab <- paste0("Size",'', "(","as",' ', vertunits,")")
