@@ -7,6 +7,9 @@
 #' @param timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
 #' @param annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
 #' the duration of the time interval. Default is "no"
+#' @param varUnits is a string that specifies the units of the vertical axis of the stacked bar plot.Default is "(squre kilometers)".
+#' @param constant is a numeric value to scale the or standardize the data. For exmple if the data is in meters and the user wants the results
+#' in kilometers, then the user can set the constant to 0.001. Thus, the data would be multiplied by 0.001. The default is 1.
 #' @param categoryName is a character representing the name of the category of interest. Default is "category"
 #' @param regionName is a string or character the name of the study region. Default is "region"
 #' @import dplyr
@@ -30,7 +33,9 @@ rasterstackData <- function(x,
                             zeroabsence = 'yes',
                             annualchange = 'yes',
                             categoryName = 'variable',
-                            regionName = 'region'){
+                            regionName = 'region',
+                            varUnits = "(squre kilometers)",
+                            constant  = 1){
 
 
   j <- blocks(x)
@@ -84,6 +89,7 @@ rasterstackData <- function(x,
     } else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
+      yaxislable <- paste("Change", varUnits)
     } else if(!spatialextent %in% c('unified', 1) & zeroabsence == "yes" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
@@ -95,7 +101,7 @@ rasterstackData <- function(x,
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Change in",categoryName,"category where extent is",regionName)
-      yaxislable <- "Change (% of region)"
+      yaxislable <- paste("Change", varUnits)
     }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'no'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Change in presence of",categoryName,"category where extent is",regionName)
@@ -107,7 +113,7 @@ rasterstackData <- function(x,
     }else if(spatialextent == 1 & zeroabsence == "no" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
-      yaxislable <- "Annual Change (% of region)"
+      yaxislable <- paste("Annual Change", varUnits)
     }else if(!spatialextent %in% c('unified', 1) & zeroabsence == "no" & annualchange == 'yes'){
       lengthSpext[[i]] <- nrow(clone2)/j$n
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
@@ -116,6 +122,10 @@ rasterstackData <- function(x,
       lengthSpext[[i]] <- sum(unlist(newdf$max))
       stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
       yaxislable <- "Annual Change (% of region)"
+    }else if(spatialextent == 1 & zeroabsence == "yes" & annualchange == 'yes'){
+      lengthSpext[[i]] <- nrow(clone2)/j$n
+      stackTitle <- paste("Annual Change in presence of",categoryName,"category where extent is",regionName)
+      yaxislable <- paste("Change", varUnits)
     }
 
     input2 <- d[-1] - d[-ncol(d)]
@@ -262,6 +272,8 @@ rasterstackData <- function(x,
 
   d_gains <- Reduce('+', d_gains)
   d_gains$X2 <- d_gains$X2 / j$n
+  #print(class(d_gains$X2))
+  #print(class(lengthSpext))
 
   if(!spatialextent %in% c('unified', 1)){
     lengthSpext <- sum(unlist(lengthSpext)) * spatialextent
@@ -271,14 +283,30 @@ rasterstackData <- function(x,
 
   sumLastFirst <- Reduce('+', sumLastFirst)
   sumLastFirst_2 <- Reduce('+', sumLastFirst_2)
-  if (annualchange == 'no'){
+
+  if (annualchange == 'no' & spatialextent == 1){
+    t_extent <- 1
+    gainStack <- (d_gains[-1]/(t_extent * lengthSpext))
+    gainStack$timeIntervals <- d_gains$X2
+
+    lossStack<- ((d_loss[-1] * -1)/(t_extent * lengthSpext))
+    lossStack$timeIntervals <- d_loss$X2
+
+  }else if(annualchange == 'yes' & spatialextent == 1){
+    t_extent <- timePoints[ncl_noxy] - timePoints[1]
+
+    gainStack <- (d_gains[-1]/(d_gains$X2 * lengthSpext))
+    gainStack$timeIntervals <- d_gains$X2
+
+    lossStack<- (d_loss[-1]*-1/(d_loss$X2 * lengthSpext))
+    lossStack$timeIntervals <- d_loss$X2
+  }else if (annualchange == 'no' & spatialextent != 1){
     t_extent <- 1
     gainStack <- (d_gains[-1]/(t_extent * lengthSpext)) * 100
     gainStack$timeIntervals <- d_gains$X2
 
     lossStack<- ((d_loss[-1] * -1)/(t_extent * lengthSpext)) * 100
     lossStack$timeIntervals <- d_loss$X2
-
   }else{
     t_extent <- timePoints[ncl_noxy] - timePoints[1]
 
@@ -318,10 +346,14 @@ rasterstackData <- function(x,
   transLossGain5 <- transLossGain4[- 1,]
   colnames(transLossGain5) <- c(mergLossGain$interval_2)
   meltLossGain5 <- reshape2::melt(transLossGain5)
+
+  meltLossGain5$value <-  meltLossGain5$value * constant
+
   colnames(transLossGain5) <- c(mergLossGain$Time_intervals)
   meltLossGain5b <- reshape2::melt(transLossGain5)
   meltLossGain5$size <- meltLossGain5b$Var2
   prodGainLossInt <- meltLossGain5$value*meltLossGain5$size
+
 
   gainLine <- sum(prodGainLossInt[prodGainLossInt > 0])/(timePoints[ncl_noxy] - timePoints[1])
   lossLine <- sum(prodGainLossInt[prodGainLossInt < 0])/(timePoints[ncl_noxy] - timePoints[1])
@@ -334,10 +366,17 @@ rasterstackData <- function(x,
   } else{
     Net <- "Zero Quantity"
   }
-  netAbs <- abs(net)
+  netAbs <- (abs(net))
 
-  allocation <- (sumLastFirst * (100/ lengthSpext)) / (timePoints[ncl_noxy] - timePoints[1]) - netAbs
-  alternation <- gainLine - lossLine - allocation - netAbs
+  if (spatialextent == 1){
+    allocation <- ((sumLastFirst * (lengthSpext)) / (timePoints[ncl_noxy] - timePoints[1])* constant) - netAbs
+    alternation <- (gainLine - lossLine - allocation - netAbs)
+
+  }else{
+    allocation <- ((sumLastFirst * (100 / lengthSpext)) / (timePoints[ncl_noxy] - timePoints[1])* constant) - netAbs
+    alternation <- (gainLine - lossLine - allocation - netAbs)
+  }
+
   nameRegion <- c("Annual Change in region Y",
                   "Annual Change in region Y2",
                   "Annual Change in region Y3")
@@ -360,18 +399,18 @@ rasterstackData <- function(x,
                         names(trajNames3) <- "trajNames2"
                         nameCol2 <- left_join(trajNames3,nameCol1,by = "trajNames2")
 
-  close(pb)
-  return(list("Factor dataframe for trajectory stacke bar plot" = meltLossGain5,
-              "Value of gain line" = gainLine,
-              "Value of loss line" = lossLine,
-              "Dataframe for components of change" = dfCompnents2,
-              "Title of stackbar plot" = stackTitle,
-              "Size of net component" = Net,
-              "Name of category of ineterst" = categoryName,
-              "Dataframe for stackbar plot" = mergLossGain,
-              "Colors and trajectories for stacked bars" = nameCol2,
-              "vertical axis labe" = yaxislable,
-              sumLastFirst,
-              sumLastFirst_2,
-              lengthSpext))
+                        close(pb)
+                        return(list("Factor dataframe for trajectory stacke bar plot" = meltLossGain5,
+                                    "Value of gain line" = gainLine,
+                                    "Value of loss line" = lossLine,
+                                    "Dataframe for components of change" = dfCompnents2,
+                                    "Title of stackbar plot" = stackTitle,
+                                    "Size of net component" = Net,
+                                    "Name of category of ineterst" = categoryName,
+                                    "Dataframe for stackbar plot" = mergLossGain,
+                                    "Colors and trajectories for stacked bars" = nameCol2,
+                                    "vertical axis labe" = yaxislable,
+                                    sumLastFirst,
+                                    sumLastFirst_2,
+                                    lengthSpext))
 }

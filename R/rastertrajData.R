@@ -1,8 +1,6 @@
 #' creates the data which serves as input for the "trajPlot" function.
 #' @param x is the raster stack.
 #' @param zeroabsence is a string of "yes" or "no" indicating if 0 means absence. # The unified size is the union of the locations where the category exists at any time point. The default is "yes".
-#' @param unified is a string of "yes" or "no" indicating if the analysis involves the unified size. The default is "yes"
-#' @param user_spatial is an integer for the user-defined spatial extent. Default is 0.
 #' @import dplyr
 #' @import terra
 #' @import progress
@@ -12,9 +10,7 @@
 #' @return The output from \code{\link{rastertrajData}}
 #' @export
 rastertrajData <- function(x,
-                            zeroabsence = 'yes',
-                            unified = "yes",
-                            user_spatial = 0){
+                           zeroabsence = 'yes'){
 
   rastcrs <- crs(x)
   spatialres <- res(x)
@@ -52,7 +48,7 @@ rastertrajData <- function(x,
   s <- ncl_noxy + 3
   v <- ncl_noxy - 1
 
-  unified_size <- vector('list', j$n)
+  #unified_size <- vector('list', j$n)
   lst_trajdf <- vector('list', j$n)
   clone1 <- data.frame(matrix(0, nrow = 1,ncol = 3))
   names(clone1) <- c("x","y","change")
@@ -223,7 +219,7 @@ rastertrajData <- function(x,
 
     }
 
-    unified_size[[i]] <- max_size
+    #unified_size[[i]] <- max_size
 
     trajdf <-  na.omit(rbind(traj1,traj2,traj3,traj4,traj5,traj6,traj7,traj8))
     lst_trajdf[[i]] <- trajdf
@@ -233,7 +229,7 @@ rastertrajData <- function(x,
   }
 
 
-  unified_size2 <- Reduce("+", unified_size)
+  #unified_size2 <- Reduce("+", unified_size)
 
   lst_trajdf <- rbindlist(lst_trajdf)
 
@@ -256,7 +252,7 @@ rastertrajData <- function(x,
 
   #rbind(q, c(8,'#666666',"Stable Absence", 1))
 
-  if(unified == "yes" & zeroabsence == "yes" & user_spatial == 0){
+  if(zeroabsence == "yes"){
 
     colnames(rat) <- "ID"
     cl <-
@@ -287,51 +283,7 @@ rastertrajData <- function(x,
     idmyColcl <- data.frame(ID,myCol,cl)
     df3 <- left_join(rat,idmyColcl , by = "ID")
     dfPie <- df3
-    df3 <- df3[,-2]
-    dfpie <- cbind(dfPie,pixCount)
-    dfPie[["value"]] <- pixCount
-    dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
-    dfPie2 <- subset(dfPie2, ID!= 8)
-
-  } else if(unified == "yes" & zeroabsence == "yes" & user_spatial != 0){
-
-    colnames(rat) <- "ID"
-    cl <-
-      c(
-        "Loss without Alternation",
-        "Loss with Alternation",
-        "Gain without Alternation",
-        "Gain with Alternation",
-        "All Alternation Loss First",
-        "All Alternation Gain First",
-        "Stable Presence",
-        "Stable Absence"
-
-      )
-    myCol = c('#941004','#FF6666','#020e7a','#14a5e3','#a8a803','#E6E600','#666666','#c4c3c0')
-    cl2 <-
-      c(
-        "Loss without Alternation",
-        "Loss with Alternation",
-        "Gain without Alternation",
-        "Gain with Alternation",
-        "All Alternation Loss First",
-        "All Alternation Gain First",
-        "Stable Presence"
-
-      )
-    myCol2 = c('#941004','#FF6666','#a8a803','#E6E600','#14a5e3','#020e7a','#666666')
-    ID <- c(1,2,3,4,5,6,7,8)
-    idmyColcl <- data.frame(ID,myCol,cl)
-    df3 <- left_join(rat,idmyColcl , by = "ID")
-    dfPie <- df3
-    df3 <- df3[,-2]
-    dfpie <- cbind(dfPie,pixCount)
-    dfPie[["value"]] <- pixCount
-    dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
-    diff_spatial <- user_spatial - sum(dfPie2$value)
-    dfPie2 <- rbind(dfPie2, c(8, '#c4c3c0', "Stable Absence", diff_spatial))
-    dfPie2$ID <- as.numeric(dfPie2$ID)
+    df3 <- df3[-c(2)]
 
   } else {
     colnames(rat) <- "ID"
@@ -361,25 +313,13 @@ rastertrajData <- function(x,
     idmyColcl <- data.frame(ID,myCol,cl)
     df3 <- left_join(rat,idmyColcl , by = "ID")
     df3 <- df3[,-2]
-    dfPie <- df3
-    dfpie <- cbind(dfPie,pixCount)
-    dfPie[["value"]] <- pixCount
-    dfPie2 <- dfPie[,-2] %>%slice(match(cl2, cl))
+    df3 <- df3[-c(2)]
 
   }
-  dfattribute1 <- left_join(df3, dfPie2, by = "ID")
 
-  dfattribute2 <- dfattribute1[1:3]
-
-  dfattribute3 <- dfattribute1[6:6]
-
-  dfattribute3[is.na(dfattribute3)] <- 0
-
-  dfattribute4 <- cbind(dfattribute2,dfattribute3)
 
   close(pb)
   return(list("Raster data for trajectory plot" = dfr,
               "Attribute data for trajectory plot" = df3,
-              "Data for trajectory pie chart" = dfattribute4,
               "Number of time points" = ncl_noxy))
 }

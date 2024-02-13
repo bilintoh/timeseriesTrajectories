@@ -6,39 +6,31 @@
 \usage{
 trajPlot(
   input,
-  pltunit = "m",
-  dataEpsg = 32632,
-  categoryName = "marsh's",
-  scalePos = "bottomright",
-  narrowPos = "topleft",
-  narrowSize = 0.6,
+  axisShow = "no",
+  categoryName = "forest",
+  narrowPos = NA,
+  scalePos = NA,
+  scaleSize = 0.8,
+  axisText = 1.2,
+  axisLabel = 1.2,
+  plotTitle = 1.3,
+  legendTex = 1,
   xAxis = "Longitude (m)",
   yAxis = "Latitude (m)",
-  axisText = 1.2,
-  axisLabel = 1.4,
-  plotTitle = 1.5,
-  legendTex = 0.9
+  downsample = TRUE
 )
 }
 \arguments{
 \item{input}{is the results from running the "raster_trajdata" function.}
 
-\item{pltunit}{is the unit in which the current map is plotted in, one of cm, m, km, in, ft, mi. or lat or lon.}
-
-\item{dataEpsg}{is the projection of the current map. If extents are valid lat and lons,
-the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator otherwise.}
+\item{axisShow}{dictates whether the plot axes is shown or not. "no" means
+no axes, whiles yes means the axes would be shown. The default is "no".}
 
 \item{categoryName}{is a character representing the name of the category of interest.Default is "marsh".}
 
-\item{scalePos}{where to align the scale bar. One of "bottomleft", "bottomright", "topleft", or "topright".}
-
 \item{narrowPos}{is a numeric value indicating the size of the north arrow.}
 
-\item{narrowSize}{is a numeric value indicating the size of the north arrow.}
-
-\item{xAxis}{is a character indicating label for the horizontal axis. default is "Longitude (m)".}
-
-\item{yAxis}{is a character indicating label for the vertical axis. default is "Latitude (m)".}
+\item{scalePos}{where to align the scale bar. One of "bottomleft", "bottomright", "topleft", or "topright".}
 
 \item{axisText}{is a numeric value controlling the size of the text on the horizontal and vertical ticks.}
 
@@ -47,6 +39,20 @@ the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator o
 \item{plotTitle}{is a numeric value controlling the size of the plot title.}
 
 \item{legendTex}{is a numerical value controlling the size of the legend text.}
+
+\item{xAxis}{is a character indicating label for the horizontal axis. default is "Longitude (m)".}
+
+\item{yAxis}{is a character indicating label for the vertical axis. default is "Latitude (m)".}
+
+\item{downsample}{is a string of "TRUE" or "FALSE" to down sample the spatial resolution of the plot.
+"TRUE" down samples the plot.}
+
+\item{dataEpsg}{is the projection of the current map. If extents are valid lat and lons,
+the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator otherwise.}
+
+\item{scalesize}{is a numeric value indicating the size of the scale bar.}
+
+\item{narrowSize}{is a numeric value indicating the size of the north arrow.}
 }
 \value{
 The output from \code{\link{trajPlot}}

@@ -27,6 +27,8 @@ library(reshape2)
 library(terra)
 library(dplyr)
 library( data.table)
+library(tmap)
+library(tmaptools)
 ```
 
 ## Data
@@ -134,9 +136,7 @@ Type "?rastertrajData" in your R console to see the help file.
 # user_spatial is an integer for the user-defined spatial extent. Default is 0.
 # Type "?presencePlot"  in your R console to see the help file that describes all the parameters in the function.
 traj_data <- rastertrajData(rasstackY,
-                            zeroabsence = 'yes',
-                            unified = "yes",
-                            user_spatial = 0)
+                            zeroabsence = 'yes')
 # Let's take a look.
 traj_data
 ```
@@ -149,18 +149,18 @@ Type "?rastertrajData" in your R console to see the help file.
 # pass traj_data we created to the trajPlot function.
 # Apart from the input, all the parameters are the same as the parameters for the presencePlot function
 trajPlot(traj_data,
-         pltunit = "m",
-         dataEpsg = 32632,
-         categoryName = "marsh's",
-         scalePos = "bottomright",
-         narrowPos = "topleft",
-         narrowSize = 0.6,
+         axisShow = "no",
+         categoryName = "forest",
+         narrowPos = NA,
+         scalePos = NA,
+         scaleSize = 1.5,
+         axisText = 1.2,
+         axisLabel = 1.2,
+         plotTitle = 1,
+         legendTex = 1,
          xAxis = "Longitude (m)",
          yAxis = "Latitude (m)",
-         axisText = 1.2,
-         axisLabel = 1.4,
-         plotTitle = 1.5,
-         legendTex = 0.9)
+         downsample = TRUE)
 ```
 
 The **rasterstackData** function creates results that serve as input for the **stackbarPlot** function. The output data comprises 
@@ -171,21 +171,16 @@ Type "?rasterstackData" in your R console to see the help file.
 # Create a vector for the time points.
 tps = c(2000,2001,2002,2003,2005)
 
-# I know the units of my variable is number of pixels, thus I will create a sting for the vertical units.
-vert_units <- "number of pixels"
-# zeroabsence is a string of "yes" or "no" indicating whether 0 indicates absence or not. default is "yes" meaning 0 means absence.
-# timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
-# annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
-# the duration of the time interval. Default is "no"
-# categoryName is a character representing the name of the category of interest. Default is "category"
-# regionName is a string or character the name of the study region. Default is "region"
+
 stackbar_data <- rasterstackData(rasstackY,
                                  timePoints = c(2000,2001,2002,2003,2005),
                                  spatialextent = 'unified',
                                  zeroabsence = 'yes',
-                                 annualchange = "no",
-                                 categoryName = 'forest',
-                                 regionName = 'region')
+                                 annualchange = 'yes',
+                                 categoryName = 'variable',
+                                 regionName = 'region',
+                                 varUnits = "(squre kilometers)",
+                                 constant  = 1)
 # Let's take a look.
 stackbar_data
 ```

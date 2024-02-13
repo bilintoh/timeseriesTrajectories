@@ -1,7 +1,7 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-01-03
+2024-02-13
 
 ## Data
 
@@ -164,7 +164,6 @@ presencePlot(num_pres_change,
              axisText = 1,
              axisLabel = 1,
              plotTitle = 1.2)
-#> Loading required namespace: sp
 #> Loading required namespace: rgdal
 ```
 
@@ -178,14 +177,9 @@ size. Type “?rastertrajData” in your R console to see the help file.
 ``` r
 # Let's cteae trajectory data foe the rasstackY data.
 # zeroabsence is a string of "yes" or "no" indicating if 0 means absence. The default is "yes".
-# unified is a string of "yes" or "no" indicating if the analysis involves the unified size. 
-# The unified size is the union of the locations where the category exists at any time point. The default is "yes"
-# user_spatial is an integer for the user-defined spatial extent. Default is 0.
 # Type "?presencePlot"  in your R console to see the help file that describes all the parameters in the function.
 traj_data <- rastertrajData(rasstackY,
-                            zeroabsence = 'yes',
-                            unified = "yes",
-                            user_spatial = 0)
+                            zeroabsence = 'yes')
 #>   |                                                          |                                                  |   0%  |                                                          |==================================================| 100%
 # Let's take a look.
 traj_data
@@ -211,17 +205,6 @@ traj_data
 #> 7  7 #666666            Stable Presence
 #> 8  8 #c4c3c0             Stable Absence
 #> 
-#> $`Data for trajectory pie chart`
-#>   ID myCol.x                       cl.x value
-#> 1  1 #941004   Loss without Alternation     3
-#> 2  2 #FF6666      Loss with Alternation     1
-#> 3  3 #020e7a   Gain without Alternation     2
-#> 4  4 #14a5e3      Gain with Alternation     1
-#> 5  5 #a8a803 All Alternation Loss First     1
-#> 6  6 #E6E600 All Alternation Gain First     1
-#> 7  7 #666666            Stable Presence     1
-#> 8  8 #c4c3c0             Stable Absence     0
-#> 
 #> $`Number of time points`
 #> [1] 5
 ```
@@ -235,21 +218,21 @@ Type “?rastertrajData” in your R console to see the help file.
 # pass traj_data we created to the trajPlot function.
 # Apart from the input, all the parameters are the same as the parameters for the presencePlot function
 trajPlot(traj_data,
-         pltunit = "m",
-         dataEpsg = 32632,
-         categoryName = "marsh's",
-         scalePos = "bottomright",
-         narrowPos = "topleft",
-         narrowSize = 0.6,
+         axisShow = "no",
+         categoryName = "forest",
+         narrowPos = NA,
+         scalePos = NA,
+         scaleSize = 1.5,
+         axisText = 1.2,
+         axisLabel = 1.2,
+         plotTitle = 1,
+         legendTex = 1,
          xAxis = "Longitude (m)",
          yAxis = "Latitude (m)",
-         axisText = 1.2,
-         axisLabel = 1.4,
-         plotTitle = 1.5,
-         legendTex = 0.9)
+         downsample = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 The **rasterstackData** function creates results that serve as input for
 the **stackbarPlot** function. The output data comprises data frames and
@@ -263,20 +246,15 @@ your R console to see the help file.
 tps = c(2000,2001,2002,2003,2005)
 
 # I know the units of my variable is number of pixels, thus I will create a sting for the vertical units.
-vert_units <- "number of pixels"
-# zeroabsence is a string of "yes" or "no" indicating whether 0 indicates absence or not. default is "yes" meaning 0 means absence.
-# timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
-# annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
-# the duration of the time interval. Default is "no"
-# categoryName is a character representing the name of the category of interest. Default is "category"
-# regionName is a string or character the name of the study region. Default is "region"
 stackbar_data <- rasterstackData(rasstackY,
                                  timePoints = c(2000,2001,2002,2003,2005),
                                  spatialextent = 'unified',
                                  zeroabsence = 'yes',
-                                 annualchange = "no",
-                                 categoryName = 'forest',
-                                 regionName = 'region')
+                                 annualchange = 'yes',
+                                 categoryName = 'variable',
+                                 regionName = 'region',
+                                 varUnits = "(squre kilometers)",
+                                 constant  = 1)
 #>   |                                                          |                                                  |   0%  |                                                          |==================================================| 100%
 # Let's take a look.
 stackbar_data
@@ -344,13 +322,13 @@ stackbar_data
 #> 3   Alternation compVals    20
 #> 
 #> $`Title of stackbar plot`
-#> [1] "Change in presence of forest category where extent is region"
+#> [1] "Annual Change in presence of variable category where extent is region"
 #> 
 #> $`Size of net component`
 #> [1] "Quantity Loss"
 #> 
 #> $`Name of category of ineterst`
-#> [1] "forest"
+#> [1] "variable"
 #> 
 #> $`Dataframe for stackbar plot`
 #>   All Alternation Loss First All Alternation Gain First Gain with Alternation
@@ -391,7 +369,7 @@ stackbar_data
 #> 6   Loss without Alternation #941004
 #> 
 #> $`vertical axis labe`
-#> [1] "Change (% of region)"
+#> [1] "Annual Change (% of region)"
 #> 
 #> [[11]]
 #> [1] 7

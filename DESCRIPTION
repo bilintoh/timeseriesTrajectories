@@ -33,12 +33,16 @@ Imports:
     classInt,
     reshape2,
     ggnewscale,
-    data.table
+    data.table,
+    tmap,
+    tmaptools
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
-    sf
+    sf,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
