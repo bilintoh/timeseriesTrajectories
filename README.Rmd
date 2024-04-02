@@ -5,6 +5,25 @@ date: "`r Sys.Date()`"
 output: "github_document"
 ---
 
+
+# lulcc <img src="inst/TimeSeries.png" align="right" width=150/>
+
+Analyzing the change during a time series requires methods to summarize the 
+change patterns meaningfully while allowing scientists to ignore unnecessary details. 
+
+Our `timeseriesTrajectory` package provides a suite of methods to analyze change patterns during 
+a time series. The methods apply to binary and non-negative continuous variables.
+The maps shows the spatial distribution of the change patterns, whiles, the stacked bar 
+quantify the change pattern during the time series.
+
+## Installation
+
+You can install the development version of *`timeseriesTrajectory`* from [GitHub](https://github.com/) with:
+
+install.packages("devtools")
+
+devtools::install_github("bilintoh/timeseriesTrajectory")
+
 ```{r setup,include = FALSE,warning=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -33,7 +52,7 @@ The tutorial analyzes the trajectory of variable 1, which in this instance indic
 
 The time series maps are available in GeoTIFF formats and included in the package. 
 The first step is to load the raster files. 
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # Read the raster files from "externa"l folder as terra raster format.
 #NB: The package comes with "Example_Data_Y.tif" and "Continuous_Data.tif".
 #This tutorial shows results for only Example_Data_Y.tif.
@@ -47,11 +66,11 @@ plot(rasstackY)
 
 ## Calling the `dataClean` function
 Next, use the **dataClean** function to 
-reclassify your data if necessary. The functions build upon terra's **classify** function; thus, see terra's **classify** 
+reclassify your data if necessary. The functions builds upon terra's **classify** function; thus, see terra's **classify** 
 function for more information about creating the reclassification range. I will reclassify the raster stack, so that all 0s become 1s and 1s become 2s. 
 to a binary raster stack to illustrate the functionality of the **dataClean** function.Type "?dataClean" in your R console to see the help file.
 
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # create a data frame for your range of values
 reclass_df <- cbind(from = c(1), 
                     to = c(2), 
@@ -70,7 +89,7 @@ plot(rasstackY_v2)
 The **dataPreview** function generates a time series graph for the variable where the vertical axis is the size of the variable, and the horizontal axis is time. 
 Type "?dataPreview" in your R console to see the help file.
 
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # Create a vector for the time points.
 tps = c(2000,2001,2002,2003,2005)
 
@@ -102,7 +121,7 @@ The **presencePlot** function creates a map of the number of presence and change
 Type "?presencePlot" in your R console to see the help file.
 Bilintoh, Thomas Mumuni, and Robert G Jr. Pontius. “Methods to Compare Sites Concerning a Category's Change During Various Time Intervals.” forthcoming.
 provide more information about the eight types of trajectories and the concept of the unified size
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # Let's pass thenum_pres_change we created to the presencePlot function.
 # 4326
 presencePlot(num_pres_change,
@@ -138,7 +157,7 @@ The **trajPlot** function creates the data which serves as input for the **trajP
 a raster map, pie chart, and corresponding attribute information such as colors and size.
 Type "?rastertrajData" in your R console to see the help file.
 
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # pass traj_data we created to the trajPlot function.
 # Apart from the input, all the parameters are the same as the parameters for the presencePlot function
 trajPlot(traj_data,
@@ -180,7 +199,7 @@ stackbar_data
 The **stackbarPlot** function creates stack bar plots showing gross losses and gains of the trajectories and the three change components.
 Type "?stackbarPlot" in your R console to see the help file.
 
-```{r, eval=TRUE, warning=FALSE}
+```{r, eval=TRUE, warning=FALSE, fig.align='center'}
 # pass stackbar_data we created to the stackbarPlot function.
 
 # axisSize is a numerical value that control the size of the labels on tick marks of the horizontal and vertical tick marks.

@@ -1,7 +1,28 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-02-13
+2024-04-02
+
+# lulcc <img src="inst/TimeSeries.png" align="right" width=150/>
+
+Analyzing the change during a time series requires methods to summarize
+the change patterns meaningfully while allowing scientists to ignore
+unnecessary details.
+
+Our `timeseriesTrajectory` package provides a suite of methods to
+analyze change patterns during a time series. The methods apply to
+binary and non-negative continuous variables. The maps shows the spatial
+distribution of the change patterns, whiles, the stacked bar quantify
+the change pattern during the time series.
+
+## Installation
+
+You can install the development version of *`timeseriesTrajectory`* from
+[GitHub](https://github.com/) with:
+
+install.packages(“devtools”)
+
+devtools::install_github(“bilintoh/timeseriesTrajectory”)
 
 ## Data
 
@@ -34,15 +55,15 @@ rasstackY
 plot(rasstackY)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
 
 ## Calling the `dataClean` function
 
 Next, use the **dataClean** function to reclassify your data if
-necessary. The functions build upon terra’s **classify** function; thus,
-see terra’s **classify** function for more information about creating
-the reclassification range. I will reclassify the raster stack, so that
-all 0s become 1s and 1s become 2s. to a binary raster stack to
+necessary. The functions builds upon terra’s **classify** function;
+thus, see terra’s **classify** function for more information about
+creating the reclassification range. I will reclassify the raster stack,
+so that all 0s become 1s and 1s become 2s. to a binary raster stack to
 illustrate the functionality of the **dataClean** function.Type
 “?dataClean” in your R console to see the help file.
 
@@ -61,7 +82,7 @@ rasstackY_v2 <- classify(rasstackY,reclass_df,include.lowest = TRUE)
 plot(rasstackY_v2)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 ## Calling the `dataPreview` function
 
@@ -85,7 +106,7 @@ dataPreview(rasstackY,
             xAngle = 0)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
 ## Calling the `presenceData` function
 
@@ -167,7 +188,7 @@ presencePlot(num_pres_change,
 #> Loading required namespace: rgdal
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /><img src="README_files/figure-gfm/unnamed-chunk-5-2.png" style="display: block; margin: auto;" />
 
 The **rastertrajData** function creates the data which serves as input
 for the **trajPlot** function. The output data comprises a raster map,
@@ -232,7 +253,7 @@ trajPlot(traj_data,
          downsample = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 The **rasterstackData** function creates results that serve as input for
 the **stackbarPlot** function. The output data comprises data frames and
@@ -416,12 +437,12 @@ stackbarPlot(stackbar_data,
 #> [[1]]
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
     #> 
     #> [[2]]
 
-![](README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-9-2.png" style="display: block; margin: auto;" />
 
 ## References
 
