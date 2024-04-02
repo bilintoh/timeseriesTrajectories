@@ -3,7 +3,7 @@ timeseriesTrajectories
 Thomas Mumuni Bilintoh
 2024-04-02
 
-# lulcc <img src="inst/TimeSeries.png" align="right" width=150/>
+# <img src="inst/TimeSeries.png" align="right" width=150/>
 
 Analyzing the change during a time series requires methods to summarize
 the change patterns meaningfully while allowing scientists to ignore
@@ -24,7 +24,7 @@ install.packages(“devtools”)
 
 devtools::install_github(“bilintoh/timeseriesTrajectory”)
 
-## Data
+## Example Data
 
 The example data is a time series of five binary maps at five time
 points: 2000, 2001, 2002, 2003, and 2005. The tutorial analyzes the

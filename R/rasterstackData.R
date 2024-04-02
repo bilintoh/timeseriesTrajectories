@@ -380,7 +380,7 @@ rasterstackData <- function(x,
   nameRegion <- c("Annual Change in region Y",
                   "Annual Change in region Y2",
                   "Annual Change in region Y3")
-  compNames <- c(Net,"Allocation","Alternation")
+  compNames <- c(Net,"Exchange","Alternation")
   compVals <- c(netAbs,allocation,alternation)
   dfCompnents <- as.data.frame(compVals,nameRegion)
   dfCompnents$compNames <- compNames

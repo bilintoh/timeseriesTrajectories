@@ -96,7 +96,7 @@ stackbarPlot <- function(input,
     theme(axis.text.x = element_text(angle = xAngle))
   b <- ggplot(input[[4]], aes(input[[4]]$variable,input[[4]]$value,
                               fill=factor(input[[4]]$compNames,
-                                          levels=c("Alternation","Allocation",input[[6]])))) +
+                                          levels=c("Alternation","Exchange",input[[6]])))) +
     geom_bar(stat = "identity")+
     scale_fill_manual(values = c("#D3D3D3","#A9A9A9",'#808080'))+
     scale_x_discrete(expand = expansion(add=c(0,0)))+

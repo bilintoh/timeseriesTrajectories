@@ -6,7 +6,7 @@ output: "github_document"
 ---
 
 
-# lulcc <img src="inst/TimeSeries.png" align="right" width=150/>
+# <img src="inst/TimeSeries.png" align="right" width=150/>
 
 Analyzing the change during a time series requires methods to summarize the 
 change patterns meaningfully while allowing scientists to ignore unnecessary details. 
@@ -46,7 +46,7 @@ library(tmap)
 library(tmaptools)
 ```
 
-## Data
+## Example Data
 The example data is a time series of five binary maps at five time points: 2000, 2001, 2002, 2003, and 2005.
 The tutorial analyzes the trajectory of variable 1, which in this instance indicates presence, whiles 0 represents absence.
 
