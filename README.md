@@ -1,7 +1,7 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-04-02
+2024-08-19
 
 # <img src="inst/TimeSeries.png" align="right" width=150/>
 
@@ -255,11 +255,16 @@ trajPlot(traj_data,
 
 <img src="README_files/figure-gfm/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-The **rasterstackData** function creates results that serve as input for
-the **stackbarPlot** function. The output data comprises data frames and
-corresponding attribute information such as colors and unified size,
-average gross gain, and average gross loss. Type “?rasterstackData” in
-your R console to see the help file.
+The **rasterstackData** and **dfstackData** functions create results
+that serve as input for the **stackbarPlot** function. The output data
+comprises data frames and corresponding attribute information such as
+colors and unified size, average gross gain, and average gross loss. Use
+**rasterstackData** for raster files and **dfstackData** for tables.
+Please ensure that all table columns display data for each time point,
+and make sure not to include a column ID or coordinates.Type
+“?rasterstackData” or “?dfstackData” in your R console to see the help
+files. The example below applies to both raster and tabular data.
+Remember to select **dfstackData** for tabular data.
 
 ``` r
 # Let's cteae stacked bar data foe the rasstackY data.
@@ -339,7 +344,7 @@ stackbar_data
 #> $`Dataframe for components of change`
 #>       compNames variable value
 #> 1 Quantity Loss compVals     2
-#> 2    Allocation compVals    12
+#> 2      Exchange compVals    12
 #> 3   Alternation compVals    20
 #> 
 #> $`Title of stackbar plot`

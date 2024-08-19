@@ -2,6 +2,7 @@
 
 export(dataClean)
 export(dataPreview)
+export(dfstackData)
 export(presenceData)
 export(presencePlot)
 export(rasterstackData)

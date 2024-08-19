@@ -32,6 +32,8 @@ no axes, whiles yes means the axes would be shown. The default is "no".}
 
 \item{scalePos}{where to align the scale bar. One of "bottomleft", "bottomright", "topleft", or "topright".}
 
+\item{scaleSize}{is a numeric value indicating the size of the scale bar.}
+
 \item{axisText}{is a numeric value controlling the size of the text on the horizontal and vertical ticks.}
 
 \item{axisLabel}{is a numeric value controlling the size of the  horizontal and vertical labels}
@@ -46,13 +48,6 @@ no axes, whiles yes means the axes would be shown. The default is "no".}
 
 \item{downsample}{is a string of "TRUE" or "FALSE" to down sample the spatial resolution of the plot.
 "TRUE" down samples the plot.}
-
-\item{dataEpsg}{is the projection of the current map. If extents are valid lat and lons,
-the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator otherwise.}
-
-\item{scalesize}{is a numeric value indicating the size of the scale bar.}
-
-\item{narrowSize}{is a numeric value indicating the size of the north arrow.}
 }
 \value{
 The output from \code{\link{trajPlot}}

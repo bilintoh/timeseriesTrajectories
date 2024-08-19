@@ -1,15 +1,12 @@
-# This function creates the map and pie chart for the trajectories of change.
+# This function creates the map for the trajectories of change.
 #' Creates a map and pie chart of the trajectories of the category of interest.
 #' @param input is the results from running the "raster_trajdata" function.
 #' @param axisShow dictates whether the plot axes is shown or not. "no" means
 #' no axes, whiles yes means the axes would be shown. The default is "no".
-#' @param dataEpsg is the projection of the current map. If extents are valid lat and lons,
-#' the projection is assumed to be lat and lon (EPSG:4326), or Spherical Mercator otherwise.
 #' @param categoryName is a character representing the name of the category of interest.Default is "marsh".
 #' @param scalePos where to align the scale bar. One of "bottomleft", "bottomright", "topleft", or "topright".
-#' @param scalesize is a numeric value indicating the size of the scale bar.
+#' @param scaleSize is a numeric value indicating the size of the scale bar.
 #' @param narrowPos is a numeric value indicating the size of the north arrow.
-#' @param narrowSize is a numeric value indicating the size of the north arrow.
 #' @param xAxis is a character indicating label for the horizontal axis. default is "Longitude (m)".
 #' @param yAxis is a character indicating label for the vertical axis. default is "Latitude (m)".
 #' @param axisText is a numeric value controlling the size of the text on the horizontal and vertical ticks.

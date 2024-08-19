@@ -34,14 +34,12 @@ the duration of the time interval. Default is "no"}
 
 \item{regionName}{is a string or character the name of the study region. Default is "region"}
 
-\item{varUnits}{is a string that specifies the units of the vertical axis of the stacked bar plot.Default is "(squre kilometers)".}
+\item{varUnits}{is a string that specifies the units of the vertical axis of the stacked bar plot.Default is "(sqaure kilometers)".}
 
-\item{constant}{is a numeric value to scale the or standardize the data. For exmple if the data is in meters and the user wants the results
+\item{constant}{is a numeric value to scale the or standardize the data. For example if the data is in meters and the user wants the results
 in kilometers, then the user can set the constant to 0.001. Thus, the data would be multiplied by 0.001. The default is 1.}
 }
 \value{
-The output from \code{\link{rasterstackData}}
-
 The output from \code{\link{rasterstackData}}
 }
 \description{

@@ -7,18 +7,11 @@
 #' @param timePoints is a vector containing the time points under consideration.The default is  c(2000, 2001, 2002, 2003, 2005).
 #' @param annualchange is a string of "yes" or "no". If "yes," results are expressed in annual change. Else, results are expressed in
 #' the duration of the time interval. Default is "no"
-#' @param varUnits is a string that specifies the units of the vertical axis of the stacked bar plot.Default is "(squre kilometers)".
-#' @param constant is a numeric value to scale the or standardize the data. For exmple if the data is in meters and the user wants the results
+#' @param varUnits is a string that specifies the units of the vertical axis of the stacked bar plot.Default is "(sqaure kilometers)".
+#' @param constant is a numeric value to scale the or standardize the data. For example if the data is in meters and the user wants the results
 #' in kilometers, then the user can set the constant to 0.001. Thus, the data would be multiplied by 0.001. The default is 1.
 #' @param categoryName is a character representing the name of the category of interest. Default is "category"
 #' @param regionName is a string or character the name of the study region. Default is "region"
-#' @import dplyr
-#' @import terra
-#' @import progress
-#' @import reshape2
-#' @importFrom stats var
-#' @importFrom utils setTxtProgressBar txtProgressBar
-#' @return The output from \code{\link{rasterstackData}}
 #' @import dplyr
 #' @import terra
 #' @import progress
@@ -272,8 +265,7 @@ rasterstackData <- function(x,
 
   d_gains <- Reduce('+', d_gains)
   d_gains$X2 <- d_gains$X2 / j$n
-  #print(class(d_gains$X2))
-  #print(class(lengthSpext))
+
 
   if(!spatialextent %in% c('unified', 1)){
     lengthSpext <- sum(unlist(lengthSpext)) * spatialextent
