@@ -18,11 +18,11 @@ quantify the change pattern during the time series.
 
 ## Installation
 
-You can install the development version of *`timeseriesTrajectory`* from [GitHub](https://github.com/) with:
+You can install the development version of *`timeseriesTrajectories`* from [GitHub](https://github.com/) with:
 
 install.packages("devtools")
 
-devtools::install_github("bilintoh/timeseriesTrajectory")
+devtools::install_github("bilintoh/timeseriesTrajectories")
 
 ```{r setup,include = FALSE,warning=FALSE}
 knitr::opts_chunk$set(

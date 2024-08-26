@@ -1,7 +1,7 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-08-19
+2024-08-26
 
 # <img src="inst/TimeSeries.png" align="right" width=150/>
 
@@ -17,12 +17,12 @@ the change pattern during the time series.
 
 ## Installation
 
-You can install the development version of *`timeseriesTrajectory`* from
-[GitHub](https://github.com/) with:
+You can install the development version of *`timeseriesTrajectories`*
+from [GitHub](https://github.com/) with:
 
 install.packages(“devtools”)
 
-devtools::install_github(“bilintoh/timeseriesTrajectory”)
+devtools::install_github(“bilintoh/timeseriesTrajectories”)
 
 ## Example Data
 
