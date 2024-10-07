@@ -1,7 +1,7 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-08-26
+2024-10-07
 
 # <img src="inst/TimeSeries.png" align="right" width=150/>
 
@@ -9,7 +9,7 @@ Analyzing the change during a time series requires methods to summarize
 the change patterns meaningfully while allowing scientists to ignore
 unnecessary details.
 
-Our `timeseriesTrajectory` package provides a suite of methods to
+Our `timeseriesTrajectories` package provides a suite of methods to
 analyze change patterns during a time series. The methods apply to
 binary and non-negative continuous variables. The maps shows the spatial
 distribution of the change patterns, whiles, the stacked bar quantify
@@ -451,13 +451,18 @@ stackbarPlot(stackbar_data,
 
 ## References
 
-Pontius Jr, R. G. (2022). Metrics That Make a Difference: How to Analyze
-Change and Error. Springer Nature Switzerland AG.
+Bilintoh, T.M., Pontius Jr, R,.G., & Zhang, A., (2024). Methods to
+compare sites concerning a Category’s change during various time
+intervals. GIScience & Remote Sensing, 61 (1), 14.
+<https://doi.org/10.1080/15481603.2024.2409484>
+
+Pontius Jr, R. G., (2022). Metrics That Make a Difference: How to
+Analyze Change and Error. Springer Nature Switzerland AG.
 
 Bilintoh, T.M., Korah, A., Opuni, A., & Akansobe, A., (2022). Comparing
 the Trajectory of Urban Impervious Surface in Two Cities: The Case of
-Accra and Kumasi , Ghana. Land, 12 (927), 14.
+Accra and Kumasi, Ghana. Land, 12 (927), 14.
 
-Pontius Jr, R. G., Krithivasan, R., Sauls, L., Yan, Y., & Zhang, Y.
+Pontius Jr, R. G., Krithivasan, R., Sauls, L., Yan, Y., & Zhang, Y.,
 (2017). Methods to summarize change among land categories across time
 intervals. Journal of Land Use Science, 12(4), 218–230.
