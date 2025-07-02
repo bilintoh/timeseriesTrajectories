@@ -19,10 +19,11 @@ quantify the change pattern during the time series.
 ## Installation
 
 You can install the development version of *`timeseriesTrajectories`* from [GitHub](https://github.com/) with:
-
+``` 
 install.packages("devtools")
 
 devtools::install_github("bilintoh/timeseriesTrajectories")
+``` 
 
 ```{r setup,include = FALSE,warning=FALSE}
 knitr::opts_chunk$set(
@@ -45,6 +46,18 @@ library( data.table)
 library(tmap)
 library(tmaptools)
 ```
+
+## Before you start using the package
+To use the `timeseriesTrajectories` package with raster files, ensure that all "no data" values are set to NA (or na). 
+This is essential because the package relies on the Terra package in R for most raster processing, and Terra automatically 
+excludes NA values during analysis. Preparing your data by handling NAs correctly is crucial for the `timeseriesTrajectories` 
+package to function properly.
+
+The package supports both binary and continuous datasets. For binary analysis, values must be strictly 0 and 1. 
+Please reclassify your data accordingly. An example of this reclassification will be demonstrated with the `dataClean` function.
+
+You can find a video tutorial on how to use the package here: https://www.youtube.com/watch?v=m0xPSuklyHA
+
 
 ## Example Data
 The example data is a time series of five binary maps at five time points: 2000, 2001, 2002, 2003, and 2005.
@@ -228,15 +241,15 @@ stackbarPlot(stackbar_data,
 ```
 
 ## References
-Bilintoh, T.M., Pontius Jr, R,.G., & Zhang, A., A., (2024). Methods to compare sites concerning a Category’s change during various time
-intervals, Ghana. GIScience & Remote Sensing,  61 (1), 14. https://doi.org/10.1080/15481603.2024.2409484
+Bilintoh, T.M., Pontius Jr, R,.G., & Zhang, A., (2024). Methods to compare sites concerning a Category’s change during various time
+intervals. GIScience & Remote Sensing,  61 (1), 14. https://doi.org/10.1080/15481603.2024.2409484
 
-Pontius Jr, R. G. (2022). Metrics That Make a Difference: How to Analyze Change and Error. Springer Nature Switzerland AG.
+Pontius Jr, R. G., (2022). Metrics That Make a Difference: How to Analyze Change and Error. Springer Nature Switzerland AG.
 
 Bilintoh, T.M., Korah, A., Opuni, A., & Akansobe, A., (2022). Comparing the Trajectory of Urban Impervious Surface in Two Cities: 
 The Case of Accra and Kumasi, Ghana. Land,  12 (927), 14. 
 
-Pontius Jr, R. G., Krithivasan, R., Sauls, L., Yan, Y., & Zhang, Y. (2017). Methods to summarize change among land
+Pontius Jr, R. G., Krithivasan, R., Sauls, L., Yan, Y., & Zhang, Y., (2017). Methods to summarize change among land
 categories across time intervals. Journal of Land Use Science, 12(4), 218–230. 
 
 

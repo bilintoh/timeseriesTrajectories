@@ -1,7 +1,7 @@
 Package: timeseriesTrajectories
 Type: Package
 Title: Analyzes The Trajectories of a Variable During a Time Series
-Version: 1.0.3
+Version: 1.1.3
 Authors@R: 
   c(person(given = "Thomas Mumuni",
            family = "Bilintoh",

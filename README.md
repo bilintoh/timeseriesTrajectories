@@ -1,7 +1,7 @@
 timeseriesTrajectories
 ================
 Thomas Mumuni Bilintoh
-2024-10-07
+2025-07-02
 
 # <img src="inst/TimeSeries.png" align="right" width=150/>
 
@@ -20,9 +20,26 @@ the change pattern during the time series.
 You can install the development version of *`timeseriesTrajectories`*
 from [GitHub](https://github.com/) with:
 
-install.packages(“devtools”)
+    install.packages("devtools")
 
-devtools::install_github(“bilintoh/timeseriesTrajectories”)
+    devtools::install_github("bilintoh/timeseriesTrajectories")
+
+## Before you start using the package
+
+To use the `timeseriesTrajectories` package with raster files, ensure
+that all “no data” values are set to NA (or na). This is essential
+because the package relies on the Terra package in R for most raster
+processing, and Terra automatically excludes NA values during analysis.
+Preparing your data by handling NAs correctly is crucial for the
+`timeseriesTrajectories` package to function properly.
+
+The package supports both binary and continuous datasets. For binary
+analysis, values must be strictly 0 and 1. Please reclassify your data
+accordingly. An example of this reclassification will be demonstrated
+with the `dataClean` function.
+
+You can find a video tutorial on how to use the package here:
+<https://www.youtube.com/watch?v=m0xPSuklyHA>
 
 ## Example Data
 

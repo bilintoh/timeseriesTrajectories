@@ -4,12 +4,10 @@
 \alias{dataClean}
 \title{The function allows users to reclassify their raster files.}
 \usage{
-dataClean(x, reclassify = "no", classifyDf = NULL)
+dataClean(x, classifyDf = NULL)
 }
 \arguments{
 \item{x}{is the data which must be a raster stack}
-
-\item{reclassify}{indicates whether the user wants to reclassify the raster data or not. default set to "no"}
 
 \item{classifyDf}{is a data frame containing the range of number to be reclassified and their corresponding new values. Default is NULL.}
 }
